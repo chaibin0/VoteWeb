@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>투표 조회</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/lib/semantic/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/lib/semantic/semantic.min.js"></script>
+</head>
+
+<body>
+    <div th:replace="fragments/header"> </div>
+
+    <div class="wrapper">
+        <h1 class="ui header">투표</h1>
+
+        <div id="voteForm">
+            <table class="ui definition table">
+                <tbody>
+                    <tr>
+                        <td>투표 제목</td>
+                        <td>
+                            <span>[[${voteInfo.name}]]</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>투표 설명</td>
+                        <td>
+                            <span>[[${voteInfo.description}]]</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="votes">
+                <div class="vote-item" th:each="vote : ${voteInfo.voteList}">
+                    <h2>[[${vote.name}]]</h2>
+                    <table class="ui celled table candidate-items">
+                        <thead>
+                            <tr>
+                                <th>후보자명</th>
+                                <th>설명</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="candidate : ${vote.candidateList}">
+                                <td>[[${candidate.name}]]</td>
+                                <td>[[${candidate.description}]]</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <br><br>
+    </div>
+</body>
+
+</html>

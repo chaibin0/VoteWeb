@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>신청서 작성</title>
+    <link rel="stylesheet" type="text/css" href="/lib/semantic/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/lib/semantic/semantic.min.js"></script>
+    <script src="/js/apply.js"></script>
+</head>
+
+<body>
+    <div th:replace="fragments/header"></div>
+    <div class="wrapper">
+        <h1 class="ui header">이용신청서</h1>
+        <div class="sub header">이용신청서를 작성하세요</div>
+
+        <div class="ui input">
+            <input type="radio" name="sameInfo" id="sameInfo" onclick="sameInfo(this)">
+            <label>기존 정보와 동일</label>
+        </div>
+
+        <table class="ui definition table">
+            <tbody>
+                <tr>
+                    <td>투표명</td>
+                    <td>
+                        <div class="ui input">
+                            <input type="text" name="voteTitle" id="voteTitle" placeholder="투표명을 입력하세요">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>대표자이름</td>
+                    <td>
+                        <div class="ui input">
+                            <input type="text" name="name" id="name" placeholder="이름을 입력하세요">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>이메일</td>
+                    <td>
+                        <div class="ui input">
+                            <input type="email" name="email" id="email" placeholder="이메일을 입력하세요">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>전화번호</td>
+                    <td>
+                        <div class="ui labeled input">
+                            <input type="text" name="phone1" id="phone1" placeholder="010">
+                            <div class="ui basic label">ㅡ</div>
+                            <input type="text" name="phone2" id="phone2" placeholder="XXXX">
+                            <div class="ui basic label">ㅡ</div>
+                            <input type="text" name="phone3" id="phone3" placeholder="XXXX">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>예상 투표 인원</td>
+                    <td>
+                        <div class="ui right labeled input">
+                            <input type="number" name="expectedCount" id="expectedCount">
+                            <div class="ui basic label">명</div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>시작 날짜</td>
+                    <td>
+                        <div class="ui labeled input">
+                            <select name="startYear" id="startYear" required>
+                                <option value="">Year</option>
+                            </select>
+                            <div class="ui basic label">년</div>
+                            <select name="startMonth" id="startMonth" required>
+                                <option value="">month</option>
+                                <option value="01">1월</option>
+                                <option value="02">2월</option>
+                                <option value="03">3월</option>
+                                <option value="04">4월</option>
+                                <option value="05">5월</option>
+                                <option value="06">6월</option>
+                                <option value="07">7월</option>
+                                <option value="08">8월</option>
+                                <option value="09">9월</option>
+                                <option value="10">10월</option>
+                                <option value="11">11월</option>
+                                <option value="12">12월</option>
+                            </select>
+                            <div class="ui basic label">월</div>
+                            <select name="startDay" id="startDay" required>
+                                <option value="">Day</option>
+                            </select>
+                            <div class="ui basic label">일</div>
+                            <select name="startHour" id="startHour" required>
+                                <option value="">hour</option>
+                                <option value="00">0시</option>
+                                <option value="01">1시</option>
+                                <option value="02">2시</option>
+                                <option value="03">3시</option>
+                                <option value="04">4시</option>
+                                <option value="05">5시</option>
+                                <option value="06">6시</option>
+                                <option value="07">7시</option>
+                                <option value="08">8시</option>
+                                <option value="09">9시</option>
+                                <option value="10">10시</option>
+                                <option value="11">11시</option>
+                                <option value="12">12시</option>
+                                <option value="13">13시</option>
+                                <option value="14">14시</option>
+                                <option value="15">15시</option>
+                                <option value="16">16시</option>
+                                <option value="17">17시</option>
+                                <option value="18">18시</option>
+                                <option value="19">19시</option>
+                                <option value="20">20시</option>
+                                <option value="21">21시</option>
+                                <option value="22">22시</option>
+                                <option value="23">23시</option>
+                            </select>
+                            <div class="ui basic label">시</div>
+                            <select name="startMinute" id="startMinute" required>
+                                <option value="">minute</option>
+                                <option value="00">0분</option>
+                                <option value="05">5분</option>
+                                <option value="10">10분</option>
+                                <option value="15">15분</option>
+                                <option value="20">20분</option>
+                                <option value="25">25분</option>
+                                <option value="30">30분</option>
+                                <option value="35">35분</option>
+                                <option value="40">40분</option>
+                                <option value="45">45분</option>
+                                <option value="50">50분</option>
+                                <option value="55">55분</option>
+                            </select>
+                            <div class="ui basic label">분</div>
+
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>종료 날짜</td>
+                    <td>
+                        <div class="ui labeled input">
+                            <select name="endYear" id="endYear" required>
+                                <option value="">Year</option>
+                            </select>
+                            <div class="ui basic label">년</div>
+                            <select name="endMonth" id="endMonth" required>
+                                <option value="">month</option>
+                                <option value="01">1월</option>
+                                <option value="02">2월</option>
+                                <option value="03">3월</option>
+                                <option value="04">4월</option>
+                                <option value="05">5월</option>
+                                <option value="06">6월</option>
+                                <option value="07">7월</option>
+                                <option value="08">8월</option>
+                                <option value="09">9월</option>
+                                <option value="10">10월</option>
+                                <option value="11">11월</option>
+                                <option value="12">12월</option>
+                            </select>
+                            <div class="ui basic label">월</div>
+                            <select name="endDay" id="endDay" required>
+                                <option value="">Day</option>
+                            </select>
+                            <div class="ui basic label">일</div>
+                            <select name="endHour" id="endHour" required>
+                                <option value="">hour</option>
+                                <option value="00">0시</option>
+                                <option value="01">1시</option>
+                                <option value="02">2시</option>
+                                <option value="03">3시</option>
+                                <option value="04">4시</option>
+                                <option value="05">5시</option>
+                                <option value="06">6시</option>
+                                <option value="07">7시</option>
+                                <option value="08">8시</option>
+                                <option value="09">9시</option>
+                                <option value="10">10시</option>
+                                <option value="11">11시</option>
+                                <option value="12">12시</option>
+                                <option value="13">13시</option>
+                                <option value="14">14시</option>
+                                <option value="15">15시</option>
+                                <option value="16">16시</option>
+                                <option value="17">17시</option>
+                                <option value="18">18시</option>
+                                <option value="19">19시</option>
+                                <option value="20">20시</option>
+                                <option value="21">21시</option>
+                                <option value="22">22시</option>
+                                <option value="23">23시</option>
+                            </select>
+                            <div class="ui basic label">시</div>
+                            <select name="endMinute" id="endMinute" required>
+                                <option value="">minute</option>
+                                <option value="00">0분</option>
+                                <option value="05">5분</option>
+                                <option value="10">10분</option>
+                                <option value="15">15분</option>
+                                <option value="20">20분</option>
+                                <option value="25">25분</option>
+                                <option value="30">30분</option>
+                                <option value="35">35분</option>
+                                <option value="40">40분</option>
+                                <option value="45">45분</option>
+                                <option value="50">50분</option>
+                                <option value="55">55분</option>
+                            </select>
+                            <div class="ui basic label">분</div>
+
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="apply-button">
+            <button type="submit" class="ui primary button" onclick='applySubmit()'>등록 </button>
+        </div>
+    </div>
+    <footer th:replace="fragments/footer"></footer>
+
+</body>
+<script>
+    window.onload = () => {
+
+        let startYear = document.getElementById('startYear');
+        let endYear = document.getElementById('endYear');
+        let now = new Date().getFullYear();
+        let yearSegment = `<option value="">Year</option>\
+        <option value="${now}">${now}</option>\
+        <option value="${now+1}">${now+1}</option>\
+        `;
+        startYear.innerHTML = yearSegment;
+        endYear.innerHTML = yearSegment;
+
+
+
+        let startMonth = document.getElementById('startMonth');
+        let endMonth = document.getElementById('endMonth');
+        startMonth.addEventListener("change", function () {
+            let startDay = document.getElementById('startDay');
+            let numDays;
+            switch (this.options[this.selectedIndex].value) {
+                case '02':
+                    numDays = 28;
+                    break;
+                case '04':
+                case '06':
+                case '09':
+                case '11':
+                    numDays = 30;
+                    break;
+                case '01':
+                case '03':
+                case '05':
+                case '07':
+                case '08':
+                case '10':
+                case '12':
+                    numDays = 31;
+                    break;
+                default:
+                    numDays = 0;
+            }
+            let startDaySegment = `<option value="">Day</option>\
+            `;
+            for (let i = 1; i <= numDays; i++) {
+                startDaySegment += `<option value="${i}">${i}일</option>\
+                `;
+            }
+            startDay.innerHTML = startDaySegment;
+        });
+
+        endMonth.addEventListener("change", function () {
+            let endDay = document.getElementById('endDay');
+            let numDays;
+            switch (this.options[this.selectedIndex].value) {
+                case '02':
+                    numDays = 28;
+                    break;
+                case '04':
+                case '06':
+                case '09':
+                case '11':
+                    numDays = 30;
+                    break;
+                case '01':
+                case '03':
+                case '05':
+                case '07':
+                case '08':
+                case '10':
+                case '12':
+                    numDays = 31;
+                    break;
+                default:
+                    numDays = 0;
+            }
+            let endDaySegment = `<option value="">Day</option>\
+            `;
+            for (let i = 1; i <= numDays; i++) {
+                endDaySegment += `<option value="${i}">${i}일</option>\
+                `;
+            }
+            endDay.innerHTML = endDaySegment;
+        });
+    }
+</script>
+
+</html>

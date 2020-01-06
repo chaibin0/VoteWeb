@@ -1,0 +1,49 @@
+{
+    "applyId" : 1,
+    "voteInfoTitle" : "이것은 투표 제목",
+    "voteInfoDesc" : "이것은 투표 설명",
+    "voteInfoCount" : 10,
+    "vote" : [
+        {
+            "voteSeqNum" : 1,
+            "voteSelNum" : 1,
+            "voteName" : "이것은 1번째 투표 제목이여",
+            "voteElecNum" : 1,
+            "candidate" :[
+                {
+                    "voteElecNum" : 1,
+                    "candidateSeqNo" : 1,
+                    "candidateName" : "후보자 이름이여1",
+                    "candidateDesc" : "추가 설명할거있으면 여기서 말혀1"
+                },
+                {
+                    "voteElecNum" : 1,
+                    "candidateSeqNo" : 2,
+                    "candidateName" : "후보자 이름이여",
+                    "candidateDesc" : "추가 설명할거있으면 여기서 말혀2"
+                }
+            ]
+        },
+        {
+            "voteSeqNum" : 2,
+            "voteSelNum" : 1,
+            "voteName" : "이것은 1번째 투표 제목이여",
+            "voteElecNum" : 1,
+            "candidate" :[
+                {
+                    "voteElecNum" : 1,
+                    "candidateSeqNo" : 1,
+                    "candidateName" : "후보자 이름이여1",
+                    "candidateDesc" : "추가 설명할거있으면 여기서 말혀1"
+                },
+                {
+                    "voteElecNum" : 1,
+                    "candidateSeqNo" : 2,
+                    "candidateName" : "후보자 이름이여",
+                    "candidateDesc" : "추가 설명할거있으면 여기서 말혀2"
+                }
+            ]
+        }
+    ]
+}
+

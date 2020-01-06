@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>신청 정보</title>
+    <link rel="stylesheet" type="text/css" href="/lib/semantic/semantic.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<script>
+    async function counting(id) {
+        if (!confirm('개표하시겠습니까?')) {
+            return;
+        }
+        //modal 켜짐
+
+        console.log("실행");
+        let response = await fetch(`/api/v1/result/${id}`, {
+            method: 'POST',
+        });
+
+        if (response && response.ok) {
+            alert("개표 끝");
+            window.location.reload();
+        } else {
+            alert(await response.text())
+        }
+
+    }
+</script>
+</head>
+
+<body>
+    <div th:replace="fragments/header"></div>
+
+    <div class="wrapper">
+
+        <h1 class="ui header">이용신청서 리스트</h1>
+
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>투표명</th>
+                    <th>투표시작날짜</th>
+                    <th>투표종료날짜</th>
+                    <th>승인여부</th>
+                    <th>투표</th>
+                    <th>후보자</th>
+                    <th>개표</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="list : ${applyList}">
+                    <td><a th:href="|/apply/${list.id}|">[[${list.title}]]</a></td>
+                    <td>[[${list.start}]]</td>
+                    <td>[[${list.end}]]</td>
+                    <td>
+                        <span th:if="${list.approval}==1"><i class="icon checkmark"></i>승인</span>
+                        <span th:if="${list.approval}==0"><i class="icon close"></i>거부</span>
+                        <span th:if="${list.approval}==-1">미정</span>
+                    </td>
+                    <td>
+                        <a th:if="!${list.hasVote} and ${list.approval}==1"
+                            th:href="|/apply/${list.id}/vote/making|">등록</a>
+                        <a th:if="${list.hasVote} and ${list.approval}==1"
+                            th:href="|/apply/${list.id}/vote/view|">조회</a>
+                        <span th:if="${list.approval}==-1">승인후 등록</span>
+                        <span th:if="${list.approval}==0"><i class="icon close"></i>등록불가</span>
+                    </td>
+                    <td>
+                        <a th:if="${list.approval}==1" th:href="|/apply/${list.id}/voter|">유권자등록</a>
+                    </td>
+                    <td>
+                        <button th:if="!${list.hasResult}" th:onclick="|counting(${list.id});|">개표</button>
+                        <button th:if="${list.hasResult}"
+                            th:onclick="|window.location.href='/apply/${list.id}/vote/result'|">조회</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <br><br>
+    <footer th:replace="fragments/footer"></footer>
+
+</body>
+</html>

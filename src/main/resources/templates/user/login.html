@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>로그인</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/lib/semantic/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/lib/semantic/semantic.min.js"></script>
+    <script>
+        window.onload = () => {
+            if (location.search.substring(1) === 'error') {
+                let error = document.getElementById('error');
+                error.style.display = 'block';
+            }
+
+        }
+    </script>
+</head>
+
+<body>
+    <div th:replace="fragments/header"></div>
+    <div class="wrapper">
+        <h3 class="ui center aligned header">LOGIN</h2>
+            <div id="error" class="ui tertiary inverted red segment">
+                <p>아이디와 비밀번호가 잘못되었습니다.</p>
+            </div>
+            <div class="ui container">
+                <div class="ui segments user-sign-form">
+                    <div class="ui center form" id="sign">
+                        <form id="login" method="POST" class="ui form">
+                            <div class="ui segment">
+                                <div class="field">
+                                    <label>아이디</label>
+                                    <input type="text" name="username" id="username">
+                                </div>
+                            </div>
+                            <div class="ui segment">
+                                <div class="field">
+                                    <label>비밀번호</label>
+                                    <input type="password" name="password" id="password">
+                                </div>
+                            </div>
+                            <button class="ui button" type="submit" onclick="">로그인</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+</body>
+
+</html>

@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap");
+
+.wrapper {
+  width: 1200px;
+  margin: 0 auto;
+  padding-top: 30px;
+}
+
+#error {
+  display: none;
+}
+
+/* 메인페이지 화면 */
+.home-items {
+  margin-top: 200px;
+  margin-bottom: 200px;
+}
+
+.home-item {
+  background-color: rgba(86, 61, 124, 0.15);
+  height: 300px;
+  margin: 30px;
+  text-align: center;
+  line-height: 300px;
+  text-decoration: none;
+  color: black;
+  font-size: 25pt;
+  font-weight: bold;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+}
+
+.home-items .home-item:focus {
+  background-color: #f1f1f1;
+}
+
+.home-items .home-item:active {
+  background-color: #999;
+}
+
+/* 이용신청서 화면*/
+.apply {
+  height: 600px;
+  margin-top: 30px;
+}
+
+.apply-button {
+  margin-bottom: 100px;
+}
+
+/* 이용신청서 리스트 화면*/
+
+/* 투표제작 에디터 화면*/
+
+/* 유권자 에디터 화면*/
+
+/* 유저 정보 입력 화면 */
+.user-sign-form {
+  margin-top: 100px;
+}
+/* 투표 정보 입력 화면 */
+.vote-sign-form {
+  margin-top: 100px;
+}
+/* 투표 화면*/
+
+/* 개표 리스트 화면 */
+
+@media (max-width: 1200px) {
+  .wrapper {
+    width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-top: 30px;
+  }
+}

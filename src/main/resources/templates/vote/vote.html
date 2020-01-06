@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/lib/semantic/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/lib/semantic/semantic.min.js"></script>
+    <script th:inline="javascript">
+        window.onbeforeunload = function (e) {
+            var dialogText = '새로고침하면 안되염';
+            e.returnValue = dialogText;
+            return dialogText;
+        };
+
+        /* <![CDATA[ */
+        let currentNumber = 0;
+        let length = /*[[${voteInfo.count}]]*/ ;
+        let uid = /*[[${uid}]]*/
+            voteList = [];
+
+        function nextButton() {
+            currentNumber++;
+        }
+
+        function previousButton() {
+            currentNumber--;
+        }
+
+        async function sendVote(voteInfoId) {
+
+            let vote = [];
+            let voteListDiv = document.getElementsByClassName('voteList');
+            for (let voteDiv of voteListDiv) {
+                let voteId = voteDiv.querySelector('#voteListId').value;
+                let candidateItemsDiv = voteDiv.querySelectorAll('.candidate-items .candidate-item');
+
+                let candidate = [];
+                for (let candidateItemDiv of candidateItemsDiv) {
+                    let candidateId = candidateItemDiv.querySelector('#candidateId').value;
+                    let candidateSequenceNumber = candidateItemDiv.querySelector('#candidateSequenceNumber').value;
+
+                    let candidateItem = candidateItemDiv.querySelector(`input[name=voteList${voteId}]`);
+                    vote.push({
+                        voteInfoId,
+                        voteId,
+                        candidateSequenceNumber,
+                        candidateId,
+                        value: candidateItem.checked ? 1 : 0
+                    });
+                }
+            }
+
+            let response = await fetch(`/api/v1/vote/${uid}/voting`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(vote)
+            })
+
+
+            if (response && response.ok) {
+                alert('투표가 성공적으로 마쳤습니다');
+                window.location.href = '/vote/success';
+            } else {
+                alert('전송실패');
+            }
+        }
+        /* ]]> */
+    </script>
+</head>
+
+<body>
+
+    <div class="wrapper">
+        <h1 class="ui header">[[${voteInfo.name}]]
+            <div class="sub header">투표하세요</div>
+        </h1>
+        <div class="ui raised segment voteList" th:each="voteList : ${voteInfo.voteList}">
+            <div class="ui header">
+                [[${voteList.sequenceNumber}]]번째 투표 [[${voteList.name}]]
+                <div class="ui sub header">[[${voteList.selectedNumber}]]명 선택하세요</div>
+            </div>
+            <input type="hidden" th:value="${voteList.id}" name="voteListId" id="voteListId">
+            <div class="candidate-items ui cards">
+                <div class="candidate-item ui card" th:each="candidate, iter : ${voteList.candidateList}">
+                    <input type="hidden" th:value="${candidate.id}" name="candidateId" id="candidateId">
+                    <input type="hidden" th:value="${candidate.sequenceNumber}" name="candidateSequenceNumber"
+                        id="candidateSequenceNumber">
+                    <div class="content">
+                        <div class="header">[[${candidate.sequenceNumber}]]. [[${candidate.name}]]</div>
+                        <div class="sub header">[[${candidate.sequenceNumber}]]</div>
+                    </div>
+                    <div class="extra content">
+                        <div class="ui checkbox">
+                            <input type="checkbox" th:value="1" th:name="voteList+${voteList.id}"
+                                th:id="'candidate'+${candidate.id}">
+                            <label>선택</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <button th:onclick="|sendVote(${voteInfo.id});|">제출</button>
+    </div>
+</body>
+
+</html>

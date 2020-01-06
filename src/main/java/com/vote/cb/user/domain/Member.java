@@ -1,0 +1,79 @@
+package com.vote.cb.user.domain;
+
+import java.time.LocalDateTime;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.enums.UserStatusType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "TBL_USER")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
+@Builder
+public class Member {
+
+  @Id
+  @Column(name = "USER_ID")
+  String userId;
+
+  @Column(name = "USER_PASSWORD")
+  @JsonIgnore
+  String password;
+
+  @Column(name = "USER_NAME")
+  String name;
+
+  @Column(name = "USER_PHONE")
+  String phone;
+
+  @Column(name = "USER_EMAIL")
+  String email;
+
+  @CreatedDate
+  @Column(name = "USER_CREATED_AT")
+  LocalDateTime createdAt;
+
+  @CreatedBy
+  @Column(name = "USER_CREATED_BY")
+  @JsonIgnore
+  String createdBy;
+
+  @LastModifiedDate
+  @Column(name = "USER_UPDATED_AT")
+  @JsonIgnore
+  LocalDateTime updatedAt;
+
+  @LastModifiedBy
+  @Column(name = "USER_UPDATED_BY")
+  @JsonIgnore
+  String updatedBy;
+
+  @Column(name = "USER_STATUS")
+  @Enumerated(EnumType.STRING) // it will be converted into integer
+  UserStatusType status;
+
+  @Column(name = "USER_ROLE")
+  @Enumerated(EnumType.STRING) // it will be converted into integer
+  @JsonIgnore
+  UserRole role;
+}
