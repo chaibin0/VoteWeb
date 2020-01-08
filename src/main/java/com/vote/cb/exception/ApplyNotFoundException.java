@@ -1,7 +1,7 @@
 package com.vote.cb.exception;
 
 
-public class ApplyNotFoundException extends RuntimeException{
+public class ApplyNotFoundException extends RuntimeException {
 
   private static final long serialVersionUID = 1927089834740782209L;
 
@@ -11,5 +11,5 @@ public class ApplyNotFoundException extends RuntimeException{
     return "이용신청서가 존재하지 않습니다.";
   }
 
-  
+
 }

@@ -25,6 +25,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     this.userDetailService = userDetailService;
   }
 
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+    auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
+
+  }
 
   @Override
   protected void configure(HttpSecurity http) throws Exception {
@@ -54,11 +60,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     return new BCryptPasswordEncoder();
   }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-    auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
-
-  }
 
 }

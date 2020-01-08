@@ -1,17 +1,7 @@
 package com.vote.cb.voter;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.List;
-import java.util.UUID;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+
 import com.vote.cb.apply.controller.dto.ApplyRequestDto;
 import com.vote.cb.apply.controller.dto.VoterDto;
 import com.vote.cb.apply.domain.Apply;
@@ -20,6 +10,20 @@ import com.vote.cb.apply.domain.Voter;
 import com.vote.cb.apply.domain.VoterRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.apply.domain.enums.VoterStatusType;
+import com.vote.cb.exception.ApplyNotFoundException;
+
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -44,20 +48,16 @@ class VoterJpaTest {
     now = LocalDateTime.of(2019, Month.NOVEMBER, 22, 10, 30, 30, 0);
     update = LocalDateTime.of(2019, Month.NOVEMBER, 22, 10, 30, 30, 0);
 
-    // given
     ApplyRequestDto dto = ApplyRequestDto.builder()
         .name("홍길동")
         .email("abc@naver.com")
-        .phone("01000000000")
+        .phone("01054136068")
         .title("투표테스트")
         .expectedCount(5)
         .start(now)
         .end(update)
         .build();
 
-    // when
-
-    // then
     apply = Apply.builder()
         .name(dto.getName())
         .email(dto.getEmail())
@@ -80,7 +80,7 @@ class VoterJpaTest {
 
     long applyId = apply.getId();
     VoterDto dto = VoterDto.builder().voterName("홍길동").voterPhone("01000000000").build();
-    Apply findApply = applyRepository.findById(applyId).orElseThrow(Exception::new);
+    Apply findApply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
 
     Voter voter = Voter.builder()
         .name(dto.getVoterName())
@@ -106,7 +106,7 @@ class VoterJpaTest {
     VoterDto dto1 = VoterDto.builder().voterName("홍길동").voterPhone("01000000000").build();
     VoterDto dto2 = VoterDto.builder().voterName("홍길동2").voterPhone("01000000001").build();
 
-    Apply findApply = applyRepository.findById(applyId).orElseThrow(Exception::new);
+    Apply findApply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
 
     Voter voter1 = Voter.builder()
         .name(dto1.getVoterName())

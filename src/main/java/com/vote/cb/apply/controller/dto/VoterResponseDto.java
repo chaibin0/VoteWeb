@@ -1,7 +1,7 @@
 package com.vote.cb.apply.controller.dto;
 
-import java.util.List;
 import com.vote.cb.apply.domain.Voter;
+import java.util.List;
 
 public class VoterResponseDto {
 

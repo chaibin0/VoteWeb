@@ -1,5 +1,8 @@
 package com.vote.cb.apply.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vote.cb.apply.controller.dto.VoterDto;
+import com.vote.cb.apply.domain.enums.VoterStatusType;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import javax.persistence.CascadeType;
@@ -13,21 +16,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vote.cb.apply.controller.dto.VoterDto;
-import com.vote.cb.apply.domain.enums.VoterStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "TBL_VOTER")
@@ -86,7 +85,7 @@ public class Voter {
   public static Voter of(Apply apply, VoterDto voterDto) {
 
     return Voter.builder()
-        .name(voterDto.getVoterName())
+        .name(voterDto.getVoterName().trim())
         .phone(voterDto.getVoterPhone())
         .apply(apply)
         .ssn(UUID.randomUUID().toString().replace("-", ""))

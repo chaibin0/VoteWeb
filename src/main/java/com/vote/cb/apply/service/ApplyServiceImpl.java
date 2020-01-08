@@ -1,25 +1,26 @@
 package com.vote.cb.apply.service;
 
-import java.util.List;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Service;
 import com.vote.cb.apply.controller.dto.ApplyRequestDto;
 import com.vote.cb.apply.controller.dto.ApplyResponseDto;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
-import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.exception.ApplyNotFoundException;
 import com.vote.cb.exception.MemberNotFoundException;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
+import java.util.List;
+
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Service;
+
+
 @Service
 @RequiredArgsConstructor
 public class ApplyServiceImpl implements ApplyService {
@@ -27,6 +28,22 @@ public class ApplyServiceImpl implements ApplyService {
   private final ApplyRepository applyRepository;
 
   private final MemberRepository memberRepository;
+
+
+  @Override
+  public Page<Apply> getApplyAllList(Pageable pageable, User user) {
+
+    Member member =
+        memberRepository.findById(user.getUsername()).orElseThrow(MemberNotFoundException::new);
+
+    return applyRepository.findAllByUser(pageable, member);
+  }
+
+  @Override
+  public Page<Apply> getApplyAllList(Pageable pageable) {
+
+    return applyRepository.findAll(pageable);
+  }
 
   @Override
   public ApplyResponseDto getApply(User user, Long applyId) {
@@ -55,15 +72,6 @@ public class ApplyServiceImpl implements ApplyService {
         memberRepository.findById(user.getUsername()).orElseThrow(MemberNotFoundException::new);
     List<Apply> applies = applyRepository.findAllByUser(member);
     return applies;
-  }
-
-  @Override
-  public Page<Apply> getApplyAllList(Pageable pageable, User user) {
-
-    Member member =
-        memberRepository.findById(user.getUsername()).orElseThrow(MemberNotFoundException::new);
-
-    return applyRepository.findAllByUser(pageable, member);
   }
 
   @Override
@@ -98,9 +106,5 @@ public class ApplyServiceImpl implements ApplyService {
     return ResponseEntity.noContent().build();
   }
 
-  @Override
-  public Page<Apply> getApplyAllList(Pageable pageable) {
 
-    return applyRepository.findAll(pageable);
-  }
 }

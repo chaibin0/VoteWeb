@@ -1,10 +1,12 @@
 package com.vote.cb.vote.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.vote.cb.vote.controller.dto.VoteDto;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,10 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.vote.cb.vote.controller.dto.VoteDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -69,7 +67,7 @@ public class Vote {
     return Vote.builder()
         .sequenceNumber(voteDto.getVoteSeqNum())
         .selectedNumber(voteDto.getVoteSelNum())
-        .name(voteDto.getVoteName())
+        .name(voteDto.getVoteName().trim())
         .electedCount(voteDto.getVoteElecNum())
         .voteInfo(voteInfo)
         .build();

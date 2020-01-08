@@ -1,8 +1,5 @@
 package com.vote.cb.admin.service;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.exception.ApplyNotFoundException;
@@ -10,6 +7,9 @@ import com.vote.cb.exception.MemberNotFoundException;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor

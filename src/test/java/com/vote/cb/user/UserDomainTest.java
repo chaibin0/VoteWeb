@@ -1,13 +1,16 @@
 package com.vote.cb.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import java.time.LocalDateTime;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.enums.UserRole;
 import com.vote.cb.user.domain.enums.UserStatusType;
+
+import java.time.LocalDateTime;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 
 
 class UserDomainTest {

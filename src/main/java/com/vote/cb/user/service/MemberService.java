@@ -1,12 +1,11 @@
 package com.vote.cb.user.service;
 
-import javax.servlet.http.HttpSession;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
-import com.vote.cb.user.controller.dto.CheckUserIdRequestDto;
 import com.vote.cb.user.controller.dto.CheckUserIdResponseDto;
 import com.vote.cb.user.controller.dto.MemberResponseDto;
 import com.vote.cb.user.controller.dto.SignUpDto;
+import javax.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 
 public interface MemberService {
 

@@ -1,13 +1,13 @@
 package com.vote.cb.apply.service;
 
+import com.vote.cb.apply.controller.dto.ApplyRequestDto;
+import com.vote.cb.apply.controller.dto.ApplyResponseDto;
+import com.vote.cb.apply.domain.Apply;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
-import com.vote.cb.apply.controller.dto.ApplyRequestDto;
-import com.vote.cb.apply.controller.dto.ApplyResponseDto;
-import com.vote.cb.apply.domain.Apply;
 
 public interface ApplyService {
 

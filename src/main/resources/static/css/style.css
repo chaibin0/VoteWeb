@@ -48,11 +48,6 @@
   margin-bottom: 100px;
 }
 
-/* 이용신청서 리스트 화면*/
-
-/* 투표제작 에디터 화면*/
-
-/* 유권자 에디터 화면*/
 
 /* 유저 정보 입력 화면 */
 .user-sign-form {
@@ -62,9 +57,6 @@
 .vote-sign-form {
   margin-top: 100px;
 }
-/* 투표 화면*/
-
-/* 개표 리스트 화면 */
 
 @media (max-width: 1200px) {
   .wrapper {

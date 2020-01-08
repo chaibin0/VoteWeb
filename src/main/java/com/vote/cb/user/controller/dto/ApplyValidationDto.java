@@ -1,7 +1,7 @@
 package com.vote.cb.user.controller.dto;
 
-import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

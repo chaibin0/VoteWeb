@@ -1,14 +1,5 @@
 package com.vote.cb.vote.service;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.Voter;
@@ -25,9 +16,17 @@ import com.vote.cb.vote.domain.Result;
 import com.vote.cb.vote.domain.ResultRepository;
 import com.vote.cb.vote.domain.VoteInfoRepository;
 import com.vote.cb.vote.domain.VoteInfomation;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +61,7 @@ public class ResultServiceImpl implements ResultService {
 
     VoteInfomation voteInfo =
         voteInfoRepository.findByApply(apply).orElseThrow(VoteInfoNotFoundException::new);
-    
+
     if (voteInfo.getCurrent() <= 0) {
       return ResponseEntity.badRequest().body("투표자가 없어서 개표할 수 없습니다.");
     }

@@ -1,9 +1,17 @@
 package com.vote.cb.apply;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+
+import com.vote.cb.apply.controller.dto.ApplyRequestDto;
+import com.vote.cb.apply.domain.Apply;
+import com.vote.cb.apply.domain.ApplyRepository;
+import com.vote.cb.apply.domain.enums.ApplyStatusType;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,10 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import com.vote.cb.apply.controller.dto.ApplyRequestDto;
-import com.vote.cb.apply.domain.Apply;
-import com.vote.cb.apply.domain.ApplyRepository;
-import com.vote.cb.apply.domain.enums.ApplyStatusType;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -108,7 +112,7 @@ class ApplyJpaTest {
         .status(ApplyStatusType.REGISTERED)
         .build();
 
-    Apply newApply = applyRepository.save(apply);
+    applyRepository.save(apply);
 
     // then
     List<Apply> applyList = applyRepository.findAllByName("홍길동");
@@ -123,12 +127,13 @@ class ApplyJpaTest {
     ApplyRequestDto dto = ApplyRequestDto.builder()
         .name("홍길동")
         .email("abc@naver.com")
-        .phone("01054136068")
+        .phone("01000000000")
         .title("투표테스트")
         .expectedCount(5)
         .start(start)
         .end(end)
         .build();
+
     Apply apply = Apply.builder()
         .name(dto.getName())
         .email(dto.getEmail())
@@ -217,8 +222,10 @@ class ApplyJpaTest {
   @Test
   public void voteStartTest() {
 
-    List<Apply> applyList =
-        applyRepository.findAllByVotedEqualsAndStartLessThanEqual(false, LocalDateTime.now());
+    // List<Apply> applyList =
+    // applyRepository.findAllByVotedEqualsAndStartLessThanEqual(false, LocalDateTime.now());
+
+    fail("미구현");
 
   }
 

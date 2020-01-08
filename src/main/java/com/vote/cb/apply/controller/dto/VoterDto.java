@@ -1,10 +1,8 @@
 package com.vote.cb.apply.controller.dto;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,11 +17,10 @@ import lombok.Setter;
 public class VoterDto {
 
   @JsonProperty(value = "voterId")
-  @NotNull(message = "유권자가 존재하지 않습니다.")
   Long voterId;
 
   @JsonProperty(value = "voterName")
-  @NotEmpty(message = "유권자 이름을 다시 입력하세요")
+  @NotBlank(message = "유권자 이름을 다시 입력하세요")
   String voterName;
 
   @JsonProperty(value = "voterPhone")

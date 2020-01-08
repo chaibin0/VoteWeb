@@ -1,8 +1,10 @@
 package com.vote.cb.vote.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +21,7 @@ public class CandidateDto {
   int candidateSeqNo;
 
   @JsonProperty(value = "candidateName")
-  @NotEmpty(message = "후보자 이름이 없습니다.")
+  @NotBlank(message = "후보자 이름이 없습니다.")
   String candidateName;
 
   @JsonProperty(value = "candidateDesc")

@@ -1,5 +1,8 @@
 package com.vote.cb.apply.controller;
 
+import com.vote.cb.apply.controller.dto.ApplyResponseDto;
+import com.vote.cb.apply.service.ApplyService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -8,9 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import com.vote.cb.apply.controller.dto.ApplyResponseDto;
-import com.vote.cb.apply.service.ApplyService;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j

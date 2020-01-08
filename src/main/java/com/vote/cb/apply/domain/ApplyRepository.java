@@ -1,14 +1,13 @@
 package com.vote.cb.apply.domain;
 
+import com.vote.cb.apply.domain.enums.ApplyStatusType;
+import com.vote.cb.user.domain.Member;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Repository;
-import com.vote.cb.apply.domain.enums.ApplyStatusType;
-import com.vote.cb.user.domain.Member;
 
 @Repository
 public interface ApplyRepository extends JpaRepository<Apply, Long> {

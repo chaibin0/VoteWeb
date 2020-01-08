@@ -1,16 +1,22 @@
 package com.vote.cb.vote.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
+
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import org.springframework.format.annotation.NumberFormat;
-import org.springframework.format.annotation.NumberFormat.Style;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.format.annotation.NumberFormat.Style;
 
 @Getter
 @NoArgsConstructor
@@ -24,7 +30,7 @@ public class VoteInfoDto {
   Long applyId;
 
   @JsonProperty(value = "voteInfoTitle")
-  @NotEmpty(message = "투표이름이 존재하지 않습니다.")
+  @NotBlank(message = "투표이름이 존재하지 않습니다.")
   String voteInfoTitle;
 
   @JsonProperty(value = "voteInfoDesc")
@@ -39,5 +45,6 @@ public class VoteInfoDto {
 
   @JsonProperty(value = "vote")
   @NotEmpty(message = "투표가 존재하지 않습니다.")
+  @Size(min = 1, message = "투표가 존재하지 않습니다.")
   List<VoteDto> voteDto;
 }

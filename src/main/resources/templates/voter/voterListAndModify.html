@@ -45,10 +45,9 @@
             text-align: right;
         }
 
-        .sub{
-            margin-bottom : 30px;
+        .sub {
+            margin-bottom: 30px;
         }
-
     </style>
 </head>
 
@@ -111,17 +110,23 @@
     };
 
 
-    function removeVoter(applyId, voterId) {
-        fetch(`/api/v1/apply/${applyId}/voter/${voterId}`, {
+    async function removeVoter(applyId, voterId) {
+        let response = await fetch(`/api/v1/apply/${applyId}/voter/${voterId}`, {
             method: 'DELETE'
-        }).then(response => {
+        });
+
+        if (response && response.ok) {
             window.location.reload();
-        })
+            return;
+        }
+        
+        alert("실패");
+        window.location.reload();
     }
 
 
 
-    function registerVoter(id) {
+    async function registerVoter(id) {
         let modalDiv = document.getElementsByClassName('modal')[0];
         let voterName = modalDiv.querySelector('#name').value;
         let voterPhone = modalDiv.querySelector('#phone').value;
@@ -131,17 +136,20 @@
             voterPhone
         };
 
-        fetch(`/api/v1/apply/${id}/voter`, {
+        let response = await fetch(`/api/v1/apply/${id}/voter`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(voterDto)
-        }).then(response => {
-            window.location.reload();
-        }).catch((error) => {
-            console.log(error);
         });
+
+        if (response && response.ok) {
+            window.location.reload();
+            return;
+        }
+
+        alert("실패");
     }
 </script>
 

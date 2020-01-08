@@ -1,7 +1,7 @@
 package com.vote.cb.exception;
 
 
-public class VoteInfoNotFoundException extends RuntimeException{
+public class VoteInfoNotFoundException extends RuntimeException {
 
   private static final long serialVersionUID = 1992364707243373076L;
 
@@ -10,6 +10,6 @@ public class VoteInfoNotFoundException extends RuntimeException{
 
     return "투표정보를 찾을 수 없습니다.";
   }
-  
-  
+
+
 }

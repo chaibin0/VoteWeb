@@ -1,5 +1,9 @@
 package com.vote.cb.apply.controller;
 
+import com.vote.cb.apply.controller.dto.ApplyRequestDto;
+import com.vote.cb.apply.controller.dto.ApplyResponseDto;
+import com.vote.cb.apply.domain.Apply;
+import com.vote.cb.apply.service.ApplyService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,14 +20,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.vote.cb.apply.controller.dto.ApplyRequestDto;
-import com.vote.cb.apply.controller.dto.ApplyResponseDto;
-import com.vote.cb.apply.domain.Apply;
-import com.vote.cb.apply.service.ApplyService;
 
 @RestController
 @RequestMapping("/api/v1/apply")
-
 public class ApplyApiController {
 
   @Autowired
@@ -52,7 +51,7 @@ public class ApplyApiController {
   @PutMapping("")
   public ResponseEntity<?> modifyApply(@AuthenticationPrincipal User user,
       @RequestBody @Valid ApplyRequestDto dto) {
-
+    
     return applyService.modifyApply(user, dto);
   }
 

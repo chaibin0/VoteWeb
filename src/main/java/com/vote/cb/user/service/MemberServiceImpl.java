@@ -1,13 +1,5 @@
 package com.vote.cb.user.service;
 
-import java.net.URI;
-import java.util.List;
-import javax.servlet.http.HttpSession;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.exception.MemberNotFoundException;
@@ -18,12 +10,20 @@ import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
 import com.vote.cb.user.domain.enums.UserRole;
 import com.vote.cb.user.domain.enums.UserStatusType;
+
+import java.util.List;
+
+import javax.servlet.http.HttpSession;
+
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MemberServiceImpl implements MemberService {
 
   private final ApplyRepository applyRepository;

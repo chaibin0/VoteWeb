@@ -1,6 +1,10 @@
 package com.vote.cb.apply.controller;
 
+import com.vote.cb.apply.controller.dto.VoterDto;
+import com.vote.cb.apply.domain.Voter;
+import com.vote.cb.apply.service.VoterService;
 import javax.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,10 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.vote.cb.apply.controller.dto.VoterDto;
-import com.vote.cb.apply.domain.Voter;
-import com.vote.cb.apply.service.VoterService;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @Slf4j

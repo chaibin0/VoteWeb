@@ -1,14 +1,13 @@
 package com.vote.cb.apply.controller.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vote.cb.apply.domain.Apply;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import org.springframework.format.annotation.DateTimeFormat;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vote.cb.apply.domain.Apply;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

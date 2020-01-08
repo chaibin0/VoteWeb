@@ -96,7 +96,13 @@
 
         let votesDiv = form.querySelector('.votes');
         let voteNum = 1;
-        for (let voteItem of votesDiv.querySelectorAll('.vote-item')) {
+        let voteList = votesDiv.querySelectorAll('.vote-item');
+
+        if (voteList.length <= 0) {
+            alert('투표 최소 한개 이상 필요합니다.');
+            return;
+        }
+        for (let voteItem of voteList) {
             let voteSeqNum = voteNum++;
             let voteSelNum = 1; //나중에 추가
             let voteName = voteItem.querySelector('#title').value;
@@ -104,7 +110,13 @@
             let candidatesDiv = voteItem.querySelector('.candidates');
             let candidateNum = 1;
             let candidate = [];
-            for (let candidateItem of candidatesDiv.querySelectorAll('.candidate-item')) {
+            let candidateList = candidatesDiv.querySelectorAll('.candidate-item');
+
+            if (candidateList.length <= 1) {
+                alert('후보자 최소 두 명 이상 필요합니다.');
+                return;
+            }
+            for (let candidateItem of candidateList) {
                 let candidateSeqNo = candidateNum++;
                 let candidateName = candidateItem.querySelector('#candidate').value;
                 let candidateDesc = candidateItem.querySelector('#candidateDesc').value;
@@ -141,7 +153,7 @@
         }).then((response) => {
 
             alert("수정 되었습니다");
-            window.location.replace("/apply/list");
+            window.location.replace("/apply");
         }).catch((response) => {
             alert("수정에 실패하였습니다");
         });
@@ -200,11 +212,13 @@
                                 <div class="three fields">
                                     <div class="field">
                                         <label>후보자명</label>
-                                        <input type="text" name="candidate" id="candidate" placeholder="후보자명" th:value="${candidate.name}">
+                                        <input type="text" name="candidate" id="candidate" placeholder="후보자명"
+                                            th:value="${candidate.name}">
                                     </div>
                                     <div class="field">
                                         <label>설명</label>
-                                        <input type="text" name="candidateDesc" id="candidateDesc" placeholder="설명" th:value="${candidate.description}">
+                                        <input type="text" name="candidateDesc" id="candidateDesc" placeholder="설명"
+                                            th:value="${candidate.description}">
                                     </div>
                                     <div class="field">
                                         <label>삭제</label>

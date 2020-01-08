@@ -4,20 +4,17 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 
+import com.vote.cb.apply.service.ApplyServiceImpl;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 
-import com.vote.cb.apply.service.ApplyServiceImpl;
-
 
 @RestClientTest(ApplyServiceImpl.class)
 class ApplyRestTest {
-
-  @Autowired
-  private ApplyServiceImpl applyService;
 
   @Autowired
   private MockRestServiceServer server;
@@ -25,13 +22,14 @@ class ApplyRestTest {
   @BeforeEach
   void setUp() throws Exception {}
 
-  void RESTAPItest() {
+
+  void registerApplicationTestByRestServer() {
 
     String applicationJSon = "{"
-        + "\"userName\" : \"�씠由�\","
+        + "\"userName\" : \"이름\","
         + "\"email\": \"junit@test.com\","
-        + "\"phone\":\"010-0000-0000\","
-        + "\"voteTitle\" : \"�씠寃껋� �젣紐⑹씠�뿬\","
+        + "\"phone\":\"01000000000\","
+        + "\"voteTitle\" : \"이것은 제목이여\","
         + "\"expectedCount\" : 10,"
         + "\"startVote\" : \"2019-11-14T04:03\","
         + "\"endVote\" : \"2019-11-14T04:03\""

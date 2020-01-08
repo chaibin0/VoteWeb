@@ -1,10 +1,12 @@
 package com.vote.cb.vote.controller.dto;
 
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vote.cb.vote.domain.Vote;
 import com.vote.cb.vote.domain.VoteInfomation;
+
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

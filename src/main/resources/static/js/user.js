@@ -1,45 +1,22 @@
-/*jshint esversion: 8 */
-
-/* 유권자 정보 확인 */
-async function signVoterInfo() {
-
-    let name = document.getElementById('name').value;
-    let phone1 = document.getElementById('phone1').value;
-    let phone2 = document.getElementById('phone2').value;
-    let phone3 = document.getElementById('phone3').value;
-    let phone = phone1 + phone2 + phone3;
-    let response = await fetch('/api/v1/user/apply/validation', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            name,
-            phone
-        })
-    });
-    
-    if(response && response.ok){
-        window.location.replace("/apply/list");
-    }else{
-        console.log(error);
-    }
-}
-
-
 let checkId = false;
 
-async function checkSameId() {
+function changeId() {
+    let div = document.getElementById('checkResult');
+    checkId = false;
+    div.innerText = '';
+
+}
+
+function checkSameId() {
     let userId = document.getElementById('userId').value;
     let div = document.getElementById('checkResult');
-    let response = await fetch(`/api/v1/user/check-id?userId=${userId}`, {
+    fetch(`/api/v1/user/check-id?userId=${userId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
-    });
-
-    if(response && response.ok){
+    }).then((response) => response.json()).then((response) => {
+        console.log(response);
         if (!response.checkUserId) {
             checkId = true;
             div.innerText = '아이디 사용가능';
@@ -47,9 +24,11 @@ async function checkSameId() {
             checkId = false;
             div.innerText = '중복된 아이디';
         }
-    }else{
+    }).catch((error) => {
         console.log(error);
-    }
+    })
+
+
 }
 
 async function signup() {
@@ -63,11 +42,12 @@ async function signup() {
     let passwordChk = document.getElementById('passwordChk').value;
     if (password !== passwordChk) {
         alert("비밀번호 확인 제대로 하세요");
+        return;
     }
 
     let name = document.getElementById('name').value;
     let phone = document.getElementById('phone').value;
-    let email = document.getElementById('email').value;
+
     let response = await fetch('/api/v1/user/signup', {
         method: 'POST',
         headers: {
@@ -77,7 +57,6 @@ async function signup() {
             id,
             name,
             password,
-            email,
             phone
         })
     });
@@ -85,5 +64,7 @@ async function signup() {
     if (response && response.ok) {
         alert('회원가입이 성공하였습니다.');
         window.location.replace('/');
+    } else {
+        alert(await response.text());
     }
 }

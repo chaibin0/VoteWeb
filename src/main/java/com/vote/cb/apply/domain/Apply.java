@@ -1,5 +1,9 @@
 package com.vote.cb.apply.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vote.cb.apply.controller.dto.ApplyRequestDto;
+import com.vote.cb.apply.domain.enums.ApplyStatusType;
+import com.vote.cb.user.domain.Member;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,23 +16,18 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.DynamicUpdate;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.core.userdetails.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vote.cb.apply.controller.dto.ApplyRequestDto;
-import com.vote.cb.apply.domain.enums.ApplyStatusType;
-import com.vote.cb.user.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.userdetails.User;
 
 
 @Table(name = "TBL_APPLY")
@@ -116,10 +115,10 @@ public class Apply {
 
   public void modify(ApplyRequestDto dto) {
 
-    this.setName(dto.getName())
-        .setEmail(dto.getEmail())
+    this.setName(dto.getName().trim())
+        .setEmail(dto.getEmail().trim())
         .setPhone(dto.getPhone())
-        .setTitle(dto.getTitle())
+        .setTitle(dto.getTitle().trim())
         .setExpectedCount(dto.getExpectedCount())
         .setStart(dto.getStart())
         .setApproval(-1)

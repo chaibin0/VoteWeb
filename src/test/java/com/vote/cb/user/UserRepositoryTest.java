@@ -2,7 +2,20 @@ package com.vote.cb.user;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import com.vote.cb.apply.domain.ApplyRepository;
+import com.vote.cb.exception.MemberNotFoundException;
+import com.vote.cb.user.controller.dto.SignUpDto;
+import com.vote.cb.user.domain.Member;
+import com.vote.cb.user.domain.MemberRepository;
+import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.enums.UserStatusType;
+import com.vote.cb.vote.domain.CandidateRepository;
+import com.vote.cb.vote.domain.VoteInfoRepository;
+import com.vote.cb.vote.domain.VoteRepository;
+
 import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,24 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.transaction.annotation.Transactional;
-import com.vote.cb.apply.domain.Apply;
-import com.vote.cb.apply.domain.ApplyRepository;
-import com.vote.cb.apply.domain.enums.ApplyStatusType;
-import com.vote.cb.exception.MemberNotFoundException;
-import com.vote.cb.user.controller.dto.SignUpDto;
-import com.vote.cb.user.domain.Member;
-import com.vote.cb.user.domain.MemberRepository;
-import com.vote.cb.user.domain.enums.UserRole;
-import com.vote.cb.user.domain.enums.UserStatusType;
-import com.vote.cb.vote.domain.Candidate;
-import com.vote.cb.vote.domain.CandidateRepository;
-import com.vote.cb.vote.domain.Vote;
-import com.vote.cb.vote.domain.VoteInfoRepository;
-import com.vote.cb.vote.domain.VoteInfomation;
-import com.vote.cb.vote.domain.VoteRepository;
-import com.vote.cb.vote.domain.enums.VoteInfoStatusType;
 
 
 @DataJpaTest

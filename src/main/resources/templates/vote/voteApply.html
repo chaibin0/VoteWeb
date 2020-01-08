@@ -41,13 +41,11 @@
         let appendDiv = document.getElementsByClassName('vote-template')[0].childNodes[1];
         votes.appendChild(appendDiv.cloneNode(true));
         count++;
-        console.log(count);
     }
 
     function removeVote(value) {
         value.closest('.vote-item').remove();
         count--;
-        console.log(count);
     }
 
     function addCandidate(value) {
@@ -96,17 +94,38 @@
 
         let votesDiv = form.querySelector('.votes');
         let voteNum = 1;
-        for (let voteItem of votesDiv.querySelectorAll('.vote-item')) {
+        let voteList = votesDiv.querySelectorAll('.vote-item');
+
+        if (voteList.length <= 0) {
+            alert('투표 최소 한개 이상 필요합니다.');
+            return;
+        }
+        for (let voteItem of voteList) {
             let voteSeqNum = voteNum++;
             let voteSelNum = 1; //나중에 추가
-            let voteName = voteItem.querySelector('#title').value;
+            let voteName = voteItem.querySelector('#title').value.trim();
+            if (!voteName) {
+                alert('투표제목을 입력하세요');
+                return;
+            }
+
             let voteElecNum = 1; //나중에 추가
             let candidatesDiv = voteItem.querySelector('.candidates');
             let candidateNum = 1;
             let candidate = [];
-            for (let candidateItem of candidatesDiv.querySelectorAll('.candidate-item')) {
+            let candidateList = candidatesDiv.querySelectorAll('.candidate-item');
+
+            if (candidateList.length <= 1) {
+                alert('후보자 최소 두 명 이상 필요합니다.');
+                return;
+            }
+            for (let candidateItem of candidateList) {
                 let candidateSeqNo = candidateNum++;
-                let candidateName = candidateItem.querySelector('#candidate').value;
+                let candidateName = candidateItem.querySelector('#candidate').value.trim();
+                if (!candidateName) {
+                    alert('후보자 이름을 입력하세요');
+                    return;
+                }
                 let candidateDesc = candidateItem.querySelector('#candidateDesc').value;
                 candidate.push({
                     candidateSeqNo,
@@ -140,7 +159,7 @@
         }).then((response) => {
 
             alert("등록 되었습니다");
-            window.location.replace("/apply/list");
+            window.location.replace("/apply");
         }).catch((response) => {
             alert("등록이 실패하였습니다");
         });

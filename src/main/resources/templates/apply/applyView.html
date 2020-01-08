@@ -11,6 +11,7 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="/lib/semantic/semantic.min.js"></script>
+    <script src="/js/apply.js"></script>
 
     <style>
         .content-form {
@@ -146,171 +147,13 @@
         </table>
         <div class="modify-button">
             <button th:if="!${apply.voted}" id="modify-view" class="ui primary button"
-                onclick='modifyView()'>편집</button>
+                th:onclick='|modifyView(${apply.id})|'>편집</button>
             <button id="modify-cancle" class="ui primary button" onclick='cancleModify()'>편집취소</button>
-            <button id="modify" class="ui primary button" onclick='submit()'>수정</button>
-            <button id="apply-remove" class="ui primary red button" onclick='removeApply()'>이용신청서 삭제</button>
+            <button id="modify" class="ui primary button" th:onclick='|modifyApply(${apply.id})|'>수정</button>
+            <button id="apply-remove" class="ui primary red button" th:onclick='|removeApply(${apply.id})|'>이용신청서 삭제</button>
         </div>
 
         <footer th:replace="fragments/footer"></footer>
     </div>
 </body>
-
-<script th:inline="javascript">
-    /* <![CDATA[ */
-    async function modifyView() {
-        let applyId = /*[[${apply.id}]]*/ ;
-        let contentArray = document.getElementsByClassName('content');
-        for (let item of contentArray) {
-            item.style.display = 'none';
-        }
-
-        let contentForm = document.getElementsByClassName('content-form');
-        for (let item of contentForm) {
-            item.style.display = 'block';
-        }
-        document.getElementById('modify-view').style.display = 'none';
-        document.getElementById('modify-cancle').style.display = 'inline-block';
-        document.getElementById('modify').style.display = 'inline-block';
-
-        let response = await fetch(`/api/v1/apply/${applyId}`, {
-            method: 'GET'
-        });
-
-        let data = await response.json();
-        console.log(data);
-        document.getElementById('name').value = data.name;
-        document.getElementById('email').value = data.email;
-        document.getElementById('phone1').value = data.phone.substring(0, 3);
-        document.getElementById('phone2').value = data.phone.substring(3, 7);
-        document.getElementById('phone3').value = data.phone.substring(7, 11);
-        document.getElementById('voteTitle').value = data.voteTitle;
-        document.getElementById('expectedCount').value = data.expectedCount;
-
-        let start = new Date(data.startVote);
-        document.getElementById('startYear').value = start.getFullYear();
-        document.getElementById('startMonth').value = new Number(start.getMonth()) + 1;
-        document.getElementById('startDay').value = start.getDate();
-        document.getElementById('startHour').value = new Number(start.getHours());
-        document.getElementById('startMinute').value = start.getMinutes();
-
-        let end = new Date(data.endVote);
-
-        document.getElementById('endYear').value = end.getFullYear();
-        document.getElementById('endMonth').value = new Number(end.getMonth()) + 1;
-        document.getElementById('endDay').value = end.getDate();
-        document.getElementById('endHour').value = new Number(end.getHours());
-        document.getElementById('endMinute').value = end.getMinutes();
-    }
-
-    async function cancleModify() {
-        let contentArray = document.getElementsByClassName('content');
-
-        for (let item of contentArray) {
-            item.style.display = 'block';
-        }
-
-        let contentForm = document.getElementsByClassName('content-form');
-        for (let item of contentForm) {
-            item.style.display = 'none';
-        }
-        document.getElementById('modify-view').style.display = 'inline-block';
-        document.getElementById('modify-cancle').style.display = 'none';
-        document.getElementById('modify').style.display = 'none';
-    }
-    //각각의 검증은 나중에
-    async function submit() {
-
-        let id = /*[[${apply.id}]]*/ ;
-
-        let name = document.getElementById('name').value;
-        let email = document.getElementById('email').value;
-        let phone1 = document.getElementById('phone1').value;
-        let phone2 = document.getElementById('phone2').value;
-        let phone3 = document.getElementById('phone3').value;
-        let voteTitle = document.getElementById('voteTitle').value;
-        let expectedCount = document.getElementById('expectedCount').value;
-        let startYear = document.getElementById('startYear').value;
-        let startMonth = document.getElementById('startMonth').value;
-        let startDay = document.getElementById('startDay').value;
-        let startHour = document.getElementById('startHour').value;
-        let startMinute = document.getElementById('startMinute').value;
-
-        let endYear = document.getElementById('endYear').value;
-        let endMonth = document.getElementById('endMonth').value;
-        let endDay = document.getElementById('endDay').value;
-        let endHour = document.getElementById('endHour').value;
-        let endMinute = document.getElementById('endMinute').value;
-
-        let startVote = `${startYear}-${startMonth}-${startDay}T${startHour}:${startMinute}:00`;
-        let endVote = `${endYear}-${endMonth}-${endDay}T${endHour}:${endMinute}:00`;
-
-        let startDate = new Date(startYear, new Number(startMonth) - 1, startDay, new Number(startHour), new Number(
-            startMinute), 0);
-        let endDate = new Date(endYear, new Number(endMonth) - 1, endDay, new Number(endHour), new Number(
-            endMinute), 0);
-
-
-        let now = new Date();
-
-        if (startDate < now) {
-            alert('오늘보다 이전의 값으로 설정 불가');
-            return;
-        }
-
-        if (startDate > endDate) {
-            alert('시작날짜는 종료날짜보다 항상 앞에 있어야 합니다.')
-            return;
-        }
-
-        const value = {
-            id,
-            name,
-            email,
-            phone: phone1 + phone2 + phone3,
-            voteTitle,
-            expectedCount,
-            startVote: startVote.toISOString().slice(0, -5),
-            endVote: endVote.toISOString().slice(0, -5)
-        }
-
-        let response = await fetch('/api/v1/apply', {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(value)
-        });
-
-        if (response && response.ok) {
-            alert("성공");
-            window.location.reload();
-        } else {
-            console.log(error);
-            alert('에러@@');
-            window.location.reload();
-        }
-    }
-
-    async function removeApply() {
-        if (!confirm("이용신청서를 삭제하시겠습니까?")) {
-            return;
-        }
-
-        let id = /*[[${apply.id}]]*/ ;
-        let response = await fetch(`/api/v1/apply/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (response && response.ok) {
-            alert("삭제가 성공되었습니다");
-            window.location.replace('/apply');
-        }else{
-            console.log(error);
-            alert('에러@@');
-        }
-    }
-    /*]]>*/
-</script>
-
 </html>

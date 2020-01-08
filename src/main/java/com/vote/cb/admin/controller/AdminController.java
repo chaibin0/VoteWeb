@@ -1,11 +1,11 @@
 package com.vote.cb.admin.controller;
 
+import com.vote.cb.apply.service.ApplyService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import com.vote.cb.apply.service.ApplyService;
 
 @Controller
 @RequestMapping("/admin")

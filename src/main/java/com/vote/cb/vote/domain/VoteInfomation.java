@@ -1,5 +1,10 @@
 package com.vote.cb.vote.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.vote.cb.apply.domain.Apply;
+import com.vote.cb.vote.controller.dto.VoteInfoDto;
+import com.vote.cb.vote.domain.enums.VoteInfoStatusType;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -16,22 +21,17 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.vote.cb.apply.domain.Apply;
-import com.vote.cb.vote.controller.dto.VoteInfoDto;
-import com.vote.cb.vote.domain.enums.VoteInfoStatusType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -100,8 +100,8 @@ public class VoteInfomation {
     return VoteInfomation.builder()
         .apply(apply)
         .count(voteInfoDto.getVoteInfoCount())
-        .description(voteInfoDto.getVoteInfoDesc())
-        .name(voteInfoDto.getVoteInfoTitle())
+        .description(voteInfoDto.getVoteInfoDesc().trim())
+        .name(voteInfoDto.getVoteInfoTitle().trim())
         .status(VoteInfoStatusType.NORMAL)
         .build();
   }

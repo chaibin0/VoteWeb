@@ -1,8 +1,8 @@
 /*jshint esversion: 8 */
 
-async function approvalApplication(id) {
+function approvalApplication(id) {
 
-    let response = fetch('/api/v1/apply/approval', {
+    fetch('/api/v1/admin/apply/approval', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -10,19 +10,17 @@ async function approvalApplication(id) {
         body: JSON.stringify({
             id: id
         })
-    });
-
-    if (response && response.ok) {
+    }).then((response) => {
         alert('승인 성공하였습니다');
         window.location.reload();
-    } else {
+    }).catch((error) => {
         alert('에러');
-    }
+    });
 }
 
-async function rejectApplication(id) {
+function rejectApplication(id) {
 
-    let response = fetch('/api/v1/apply/reject', {
+    fetch('/api/v1/admin/apply/reject', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -30,12 +28,10 @@ async function rejectApplication(id) {
         body: JSON.stringify({
             id: id
         })
-    });
-    
-    if(response && response.ok){
+    }).then((response) => {
         alert('승인 거부하였습니다');
         window.location.reload();
-    }else{
+    }).catch((error) => {
         alert('에러');
-    }
+    });
 }

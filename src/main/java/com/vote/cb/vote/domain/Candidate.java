@@ -1,5 +1,7 @@
 package com.vote.cb.vote.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.vote.cb.vote.controller.dto.CandidateDto;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,8 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.vote.cb.vote.controller.dto.CandidateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,8 +70,8 @@ public class Candidate {
 
     return Candidate.builder()
         .sequenceNumber(candidateDto.getCandidateSeqNo())
-        .name(candidateDto.getCandidateName())
-        .description(candidateDto.getCandidateDesc())
+        .name(candidateDto.getCandidateName().trim())
+        .description(candidateDto.getCandidateDesc().trim())
         .vote(vote)
         .build();
   }

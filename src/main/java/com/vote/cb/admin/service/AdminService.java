@@ -1,7 +1,7 @@
 package com.vote.cb.admin.service;
 
-import org.springframework.http.ResponseEntity;
 import com.vote.cb.user.domain.Member;
+import org.springframework.http.ResponseEntity;
 
 public interface AdminService {
 

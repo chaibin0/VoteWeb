@@ -3,14 +3,16 @@ package com.vote.cb.user;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
+
+import com.vote.cb.user.service.MemberService;
+import com.vote.cb.user.service.MemberServiceImpl;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
-import com.vote.cb.user.service.MemberService;
-import com.vote.cb.user.service.MemberServiceImpl;
 
 @RestClientTest(MemberServiceImpl.class)
 class SignTest {
