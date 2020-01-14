@@ -11,62 +11,11 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="/lib/semantic/semantic.min.js"></script>
-    <script th:inline="javascript">
-        window.onbeforeunload = function (e) {
-            var dialogText = '새로고침하면 안되염';
-            e.returnValue = dialogText;
-            return dialogText;
-        };
+    <script src="/js/vote.js"></script>
 
-        /* <![CDATA[ */
-        let uid = /*[[${uid}]]*/
-
-            async function sendVote(voteInfoId) {
-
-                let vote = [];
-                let voteListDiv = document.getElementsByClassName('voteList');
-                for (let voteDiv of voteListDiv) {
-                    let voteId = voteDiv.querySelector('#voteListId').value;
-                    let candidateItemsDiv = voteDiv.querySelectorAll('.candidate-items .candidate-item');
-                    let candidate = [];
-                    for (let candidateItemDiv of candidateItemsDiv) {
-                        let candidateId = candidateItemDiv.querySelector('#candidateId').value;
-                        let candidateSequenceNumber = candidateItemDiv.querySelector('#candidateSequenceNumber')
-                            .value;
-
-                        let candidateItem = candidateItemDiv.querySelector(`input[name=voteList${voteId}]`);
-                        vote.push({
-                            voteInfoId,
-                            voteId,
-                            candidateSequenceNumber,
-                            candidateId,
-                            value: candidateItem.checked ? 1 : 0
-                        });
-                    }
-                }
-
-                let response = await fetch(`/api/v1/vote/${uid}/voting`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json'
-                    },
-                    body: JSON.stringify(vote)
-                })
-
-
-                if (response && response.ok) {
-                    alert('투표가 성공적으로 마쳤습니다');
-                    window.location.href = '/vote/success';
-                } else {
-                    alert('전송실패');
-                }
-            }
-        /* ]]> */
-    </script>
 </head>
 
 <body>
-
     <div class="wrapper">
         <h1 class="ui header">[[${voteInfo.name}]]
             <div class="sub header">투표하세요</div>
@@ -84,7 +33,6 @@
                         id="candidateSequenceNumber">
                     <div class="content">
                         <div class="header">[[${candidate.sequenceNumber}]]. [[${candidate.name}]]</div>
-                        <div class="sub header">[[${candidate.sequenceNumber}]]</div>
                     </div>
                     <div class="extra content">
                         <div class="ui checkbox">

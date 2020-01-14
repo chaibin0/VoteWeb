@@ -25,5 +25,11 @@ public interface ApplyService {
 
   ResponseEntity<?> modifyApply(User user, ApplyRequestDto dto);
 
+  boolean alreadyStart(User user, Long applyId);
 
+  boolean hasVote(User user, Long applyId);
+  
+  ResponseEntity<?> approvalApply(Long id);
+
+  ResponseEntity<?> rejectApply(Long id);
 }

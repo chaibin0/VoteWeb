@@ -10,6 +10,6 @@ public class UnAuthorizedException extends RuntimeException {
 
     return "허가되지 않은 접근입니다.";
   }
-  
-  
+
+
 }

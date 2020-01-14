@@ -29,7 +29,6 @@ public class VoterApiController {
   @Autowired
   private VoterService voterService;
 
-
   @GetMapping("")
   public Page<Voter> getVoterList(@PageableDefault Pageable pageable,
       @AuthenticationPrincipal User user,

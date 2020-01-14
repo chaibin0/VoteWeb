@@ -14,11 +14,11 @@ import org.springframework.security.core.userdetails.User;
 
 public interface VoteService {
 
-  VoteInfomation getVoteList(String name, String phone, String uid) throws Exception;
+  VoteInfomation getVoteList(String name, String phone, String uid);
 
-  ResponseEntity<VoteInfomation> saveVoteInfo(User user, VoteInfoDto dto) throws Exception;
+  ResponseEntity<VoteInfomation> saveVoteInfo(User user, VoteInfoDto dto);
 
-  ResponseEntity<?> authVoterInfo(String uid, VoteSignDto dto, HttpSession session);
+  ResponseEntity<?> authVoterInfo(VoteSignDto dto, HttpSession session);
 
   boolean invalidUid(String uid);
 
@@ -26,7 +26,7 @@ public interface VoteService {
 
   VoteResponseDto getVoteListByApplyId(User user, Long applyId);
 
-  ResponseEntity<?> modifyVoteInfo(User user, @Valid VoteInfoDto dto) throws Exception;
+  ResponseEntity<?> modifyVoteInfo(User user, @Valid VoteInfoDto dto);
 
   boolean checkVote(String name, String phone, String uid);
 

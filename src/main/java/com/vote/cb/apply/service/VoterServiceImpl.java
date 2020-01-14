@@ -8,7 +8,10 @@ import com.vote.cb.apply.domain.VoterRepository;
 import com.vote.cb.exception.ApplyNotFoundException;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.exception.VoterNotFoundException;
+
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +19,17 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class VoterServiceImpl implements VoterService {
 
-  private final ApplyRepository applyRepository;
+  private ApplyRepository applyRepository;
 
-  private final VoterRepository voterRepository;
+  private VoterRepository voterRepository;
+
+  public VoterServiceImpl(ApplyRepository applyRepository, VoterRepository voterRepository) {
+
+    this.applyRepository = applyRepository;
+    this.voterRepository = voterRepository;
+  }
 
   @Override
   public Page<Voter> getVoterListByApply(Pageable pageable, User user, long applyId) {
@@ -50,8 +58,9 @@ public class VoterServiceImpl implements VoterService {
       return ResponseEntity.badRequest().body("투표 중이거나 끝난것에 대해서는  추가할 수 없습니다.");
     }
 
-    Voter savedVoter = voterRepository.save(Voter.of(apply, dto));
-    return ResponseEntity.created(null).body(savedVoter);
+    voterRepository.save(dto.toVoter(apply));
+
+    return ResponseEntity.created(null).build();
   }
 
   @Override
@@ -68,11 +77,9 @@ public class VoterServiceImpl implements VoterService {
       return ResponseEntity.badRequest().body("투표 중이거나 끝난것에 대해서는 수정할 수 없습니다.");
     }
 
-    voter.setName(dto.getVoterName())
-        .setPhone(dto.getVoterPhone());
+    voterRepository.save(dto.modifyByDto(voter));
 
-    Voter saveVoter = voterRepository.save(voter);
-    return ResponseEntity.ok().body(saveVoter);
+    return ResponseEntity.ok().build();
   }
 
   @Override

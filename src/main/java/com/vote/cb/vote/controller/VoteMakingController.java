@@ -1,10 +1,11 @@
 package com.vote.cb.vote.controller;
 
+import com.vote.cb.apply.service.ApplyService;
+import com.vote.cb.exception.AlreadyRegiststeredException;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.vote.service.VoteService;
 
-import lombok.RequiredArgsConstructor;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -15,22 +16,31 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/apply/{applyId}/vote")
-@RequiredArgsConstructor
 public class VoteMakingController {
 
-  private final VoteService voteService;
+  @Autowired
+  private VoteService voteService;
+
+  @Autowired
+  private ApplyService applyService;
 
   @GetMapping("/making")
-  public ModelAndView viewMakingVote(@PathVariable(name = "applyId") Long applyId) {
+  public ModelAndView viewMakingVote(@AuthenticationPrincipal User user,
+      @PathVariable(name = "applyId") Long applyId) {
 
     if (!voteService.isApproval(applyId)) {
       throw new UnAuthorizedException();
+    }
+
+    if (applyService.hasVote(user, applyId)) {
+      throw new AlreadyRegiststeredException();
     }
 
     ModelAndView model = new ModelAndView();
     model.setViewName("vote/voteApply");
     model.addObject("applyId", applyId);
     return model;
+
   }
 
   @GetMapping("/view")

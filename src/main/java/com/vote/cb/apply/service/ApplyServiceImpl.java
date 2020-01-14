@@ -12,6 +12,7 @@ import com.vote.cb.user.domain.MemberRepository;
 
 import java.util.List;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -19,16 +20,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
-@RequiredArgsConstructor
 public class ApplyServiceImpl implements ApplyService {
 
-  private final ApplyRepository applyRepository;
+  private ApplyRepository applyRepository;
 
-  private final MemberRepository memberRepository;
+  private MemberRepository memberRepository;
 
+  public ApplyServiceImpl(ApplyRepository applyRepository, MemberRepository memberRepository) {
+
+    this.applyRepository = applyRepository;
+    this.memberRepository = memberRepository;
+  }
 
   @Override
   public Page<Apply> getApplyAllList(Pageable pageable, User user) {
@@ -61,7 +67,9 @@ public class ApplyServiceImpl implements ApplyService {
 
     Member member =
         memberRepository.findById(user.getUsername()).orElseThrow(MemberNotFoundException::new);
-    Apply apply = Apply.of(member, dto);
+
+    Apply apply = dto.toApply(member);
+
     return ResponseEntity.created(null).body(applyRepository.save(apply));
   }
 
@@ -101,10 +109,55 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     apply.modify(dto);
-    applyRepository.save(apply);
 
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.ok().body(applyRepository.save(apply));
   }
 
+  @Override
+  public boolean alreadyStart(User user, Long applyId) {
 
+    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+
+    if (!apply.isWriter(user)) {
+      throw new UnAuthorizedException();
+    }
+
+    if (apply.isVoted()) {
+      return true;
+    }
+
+    return false;
+  }
+
+  @Override
+  public boolean hasVote(User user, Long applyId) {
+
+    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+
+    if (!apply.isWriter(user)) {
+      throw new UnAuthorizedException();
+    }
+
+    return apply.isHasVote();
+  }
+
+  @Override
+  @Transactional
+  public ResponseEntity<?> approvalApply(Long applyId) {
+
+    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+    apply.setApproval(1);
+    applyRepository.save(apply);
+    return ResponseEntity.accepted().build();
+  }
+
+  @Override
+  public ResponseEntity<?> rejectApply(Long applyId) {
+
+    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+    apply.setApproval(0);
+    applyRepository.save(apply);
+    return ResponseEntity.accepted().build();
+
+  }
 }

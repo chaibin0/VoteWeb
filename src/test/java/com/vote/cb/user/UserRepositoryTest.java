@@ -3,16 +3,24 @@ package com.vote.cb.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
+import com.vote.cb.apply.domain.enums.ApplyStatusType;
+import com.vote.cb.exception.CandidateNotFoundException;
 import com.vote.cb.exception.MemberNotFoundException;
+import com.vote.cb.exception.VoteNotFoundException;
 import com.vote.cb.user.controller.dto.SignUpDto;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
 import com.vote.cb.user.domain.enums.UserRole;
 import com.vote.cb.user.domain.enums.UserStatusType;
+import com.vote.cb.vote.domain.Candidate;
 import com.vote.cb.vote.domain.CandidateRepository;
+import com.vote.cb.vote.domain.Vote;
 import com.vote.cb.vote.domain.VoteInfoRepository;
+import com.vote.cb.vote.domain.VoteInfomation;
 import com.vote.cb.vote.domain.VoteRepository;
+import com.vote.cb.vote.domain.enums.VoteInfoStatusType;
 
 import java.time.LocalDateTime;
 
@@ -119,6 +127,7 @@ class UserRepositoryTest {
 
   @DisplayName("유저 삭제 테스트")
   @Test
+  @Transactional
   void deleteUserTest() {
 
     Member user = Member.builder()
@@ -132,13 +141,11 @@ class UserRepositoryTest {
         .role(UserRole.USER)
         .build();
 
-    userRepository.save(user);
-
+    userRepository.saveAndFlush(user);
     userRepository.deleteById(signUpDto.getId());
 
     assertThatThrownBy(() -> {
       userRepository.findById(user.getUserId()).orElseThrow(MemberNotFoundException::new);
     }).isInstanceOf(MemberNotFoundException.class);
-
   }
 }

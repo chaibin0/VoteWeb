@@ -2,8 +2,11 @@ package com.vote.cb.admin.controller;
 
 import com.vote.cb.admin.service.AdminService;
 import com.vote.cb.apply.controller.dto.ApprovalDto;
+import com.vote.cb.apply.service.ApplyService;
 import com.vote.cb.user.domain.Member;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,7 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminApiController {
 
   @Autowired
-  AdminService adminService;
+  private AdminService adminService;
+
+  //관리자기능은 adminService로 옮길 예정
+  @Autowired
+  private ApplyService applyService;
 
   @GetMapping("/user")
   public ResponseEntity<Member> getUser(@RequestParam(name = "id") String id) {
@@ -28,7 +35,7 @@ public class AdminApiController {
     return adminService.getUser(id);
   }
 
-  @DeleteMapping("/users/remove")
+  @DeleteMapping("/user/remove")
   public ResponseEntity<?> removeUser(@RequestParam(name = "id") String id) {
 
     return adminService.removeUser(id);
@@ -37,13 +44,13 @@ public class AdminApiController {
   @PostMapping("/apply/reject")
   public ResponseEntity<?> rejectApply(@RequestBody @Valid ApprovalDto dto) {
 
-    return adminService.rejectApply(dto.getId());
+    return applyService.rejectApply(dto.getId());
   }
 
   @PostMapping("/apply/approval")
   public ResponseEntity<?> approvalApply(@RequestBody @Valid ApprovalDto dto) {
 
-    return adminService.approvalApply(dto.getId());
+    return applyService.approvalApply(dto.getId());
 
   }
 

@@ -3,6 +3,8 @@ package com.vote.cb.exception;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@Slf4j
 @RestControllerAdvice(annotations = RestController.class)
 public class RestControllerErrorAdvice {
 
@@ -20,24 +23,34 @@ public class RestControllerErrorAdvice {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> badRequest(MethodArgumentNotValidException e) {
 
+    log.info(e.getMessage(), e);
+
     BindingResult bindingResult = e.getBindingResult();
-    final List<FieldError> errors = bindingResult.getFieldErrors();
+    if (bindingResult != null) {
+
+      return ResponseEntity.badRequest()
+          .body(bindingResult.getFieldError().getDefaultMessage());
+    }
 
     return ResponseEntity.badRequest()
-        .body(errors);
+        .body("invalid Request");
   }
 
   @ExceptionHandler(UnAuthorizedException.class)
-  @ResponseStatus(value = HttpStatus.UNAUTHORIZED)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> unAuthroized(UnAuthorizedException e) {
 
+    log.info(e.getMessage(), e);
+
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "401", "UNAUTHORIZED", e.getMessage()));
+        .body(new ExceptionDetails(LocalDateTime.now(), "401", "bad request", e.getMessage()));
   }
 
   @ExceptionHandler(ApplyNotFoundException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundApply(ApplyNotFoundException e) {
+
+    log.info(e.getMessage(), e);
 
     return ResponseEntity.badRequest()
         .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
@@ -47,6 +60,8 @@ public class RestControllerErrorAdvice {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundMember(MemberNotFoundException e) {
 
+    log.info(e.getMessage(), e);
+
     return ResponseEntity.badRequest()
         .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
   }
@@ -54,6 +69,8 @@ public class RestControllerErrorAdvice {
   @ExceptionHandler(CandidateNotFoundException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundCandidate(CandidateNotFoundException e) {
+
+    log.info(e.getMessage(), e);
 
     return ResponseEntity.badRequest()
         .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
@@ -72,8 +89,23 @@ public class RestControllerErrorAdvice {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundVoteInfo(VoteInfoNotFoundException e) {
 
+    log.info(e.getMessage(), e);
+
     return ResponseEntity.badRequest()
         .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
   }
+
+
+
+  @ExceptionHandler(AlreadyRegiststeredException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ResponseEntity<?> alreadyRegister(AlreadyRegiststeredException e) {
+
+    log.info(e.getMessage(), e);
+
+    return ResponseEntity.badRequest()
+        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
+  }
+
 
 }

@@ -9,8 +9,4 @@ public interface AdminService {
 
   ResponseEntity<Member> getUser(String id);
 
-  ResponseEntity<?> approvalApply(Long id);
-
-  ResponseEntity<?> rejectApply(Long id);
-
 }

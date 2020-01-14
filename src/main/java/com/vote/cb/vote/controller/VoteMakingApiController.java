@@ -4,7 +4,9 @@ import com.vote.cb.vote.controller.dto.VoteInfoDto;
 import com.vote.cb.vote.controller.dto.VoteResponseDto;
 import com.vote.cb.vote.domain.VoteInfomation;
 import com.vote.cb.vote.service.VoteService;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -34,7 +36,7 @@ public class VoteMakingApiController {
 
   @PutMapping("")
   public ResponseEntity<?> modifyVote(@AuthenticationPrincipal User user,
-      @RequestBody VoteInfoDto dto) throws Exception {
+      @RequestBody @Valid VoteInfoDto dto) throws Exception {
 
     return voteService.modifyVoteInfo(user, dto);
   }

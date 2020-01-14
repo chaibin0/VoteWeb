@@ -119,8 +119,8 @@
             window.location.reload();
             return;
         }
-        
-        alert("실패");
+
+        alert(await response.json().message);
         window.location.reload();
     }
 
@@ -131,6 +131,15 @@
         let voterName = modalDiv.querySelector('#name').value;
         let voterPhone = modalDiv.querySelector('#phone').value;
 
+        if (!voterName) {
+            alert("이름을 입력하세요");
+            return;
+        }
+
+        if (!voterPhone) {
+            alert("휴대전화번호를 입력하세요");
+            return;
+        }
         let voterDto = {
             voterName,
             voterPhone
@@ -149,7 +158,7 @@
             return;
         }
 
-        alert("실패");
+        alert(await response.json()[0].defaultMessage);
     }
 </script>
 

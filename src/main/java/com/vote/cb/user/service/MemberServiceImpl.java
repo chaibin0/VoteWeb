@@ -17,21 +17,28 @@ import javax.servlet.http.HttpSession;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-  private final ApplyRepository applyRepository;
+  private ApplyRepository applyRepository;
 
-  private final MemberRepository userRepository;
+  private MemberRepository userRepository;
 
-  private final PasswordEncoder passwordEncoder;
+  private PasswordEncoder passwordEncoder;
 
+  public MemberServiceImpl(ApplyRepository applyRepository, MemberRepository userRepository,
+      PasswordEncoder passwordEncoder) {
+
+    this.applyRepository = applyRepository;
+    this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
+  }
 
   @Override
   public ResponseEntity<?> findApply(String userName, String phone, HttpSession session) {
@@ -55,15 +62,7 @@ public class MemberServiceImpl implements MemberService {
       return ResponseEntity.badRequest().body("아이디 중복");
     }
 
-    Member user = Member.builder()
-        .userId(dto.getId())
-        .password(passwordEncoder.encode(dto.getPassword()))
-        .name(dto.getName())
-        .email(dto.getEmail())
-        .phone(dto.getPhone())
-        .status(UserStatusType.NORMAL)
-        .role(UserRole.USER).build();
-    Member newUser = userRepository.save(user);
+    Member newUser = userRepository.save(dto.toMember(passwordEncoder));
     return ResponseEntity.created(null).body(newUser);
   }
 

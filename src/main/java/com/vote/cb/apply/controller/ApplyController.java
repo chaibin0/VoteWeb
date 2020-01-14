@@ -2,7 +2,10 @@ package com.vote.cb.apply.controller;
 
 import com.vote.cb.apply.controller.dto.ApplyResponseDto;
 import com.vote.cb.apply.service.ApplyService;
+
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
@@ -17,12 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/apply")
 public class ApplyController {
 
-  private final ApplyService applyService;
-
-  public ApplyController(ApplyService applyService) {
-
-    this.applyService = applyService;
-  }
+  @Autowired
+  private ApplyService applyService;
 
   @GetMapping("/making")
   public ModelAndView viewApply() {

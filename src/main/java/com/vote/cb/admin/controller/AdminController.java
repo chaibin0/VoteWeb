@@ -1,6 +1,8 @@
 package com.vote.cb.admin.controller;
 
 import com.vote.cb.apply.service.ApplyService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +13,8 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/admin")
 public class AdminController {
 
-  ApplyService applyService;
+  @Autowired
+  private ApplyService applyService;
 
   public AdminController(ApplyService applyService) {
 

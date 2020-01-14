@@ -1,6 +1,8 @@
 package com.vote.cb.apply.controller;
 
+import com.vote.cb.apply.service.ApplyService;
 import com.vote.cb.apply.service.VoterService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -16,13 +18,11 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/apply/{applyId}/voter")
 public class VoterController {
 
-  private final VoterService voterService;
+  @Autowired
+  private VoterService voterService;
 
   @Autowired
-  public VoterController(VoterService voterService) {
-
-    this.voterService = voterService;
-  }
+  private ApplyService applyService;
 
   @GetMapping("")
   public ModelAndView viewVoterListAndModify(@PageableDefault Pageable pageable,
@@ -30,8 +30,10 @@ public class VoterController {
       @PathVariable(value = "applyId") long applyId) {
 
     ModelAndView model = new ModelAndView();
+    String viewName =
+        applyService.alreadyStart(user, applyId) ? "voter/voterList" : "voter/voterListAndModify";
     model.addObject("voterList", voterService.getVoterListByApply(pageable, user, applyId));
-    model.setViewName("voter/voterListAndModify");
+    model.setViewName(viewName);
     return model;
   }
 

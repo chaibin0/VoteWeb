@@ -24,4 +24,8 @@ public class VoteSignDto {
   @JsonProperty(value = "phone")
   @NotBlank(message = "전화번호를 입력해주세요")
   String phone;
+
+  @JsonProperty(value = "uid")
+  @NotBlank(message = "식별번호가 정확하지 않습니다.")
+  String uid;
 }

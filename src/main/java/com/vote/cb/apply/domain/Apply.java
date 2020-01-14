@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vote.cb.apply.controller.dto.ApplyRequestDto;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.user.domain.Member;
+
 import java.time.LocalDateTime;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -16,12 +18,15 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -123,21 +128,5 @@ public class Apply {
         .setStart(dto.getStart())
         .setApproval(-1)
         .setEnd(dto.getEnd());
-  }
-
-  public static Apply of(Member user, ApplyRequestDto dto) {
-
-    return Apply.builder()
-        .name(dto.getName())
-        .email(dto.getEmail())
-        .phone(dto.getPhone())
-        .title(dto.getTitle())
-        .start(dto.getStart())
-        .end(dto.getEnd())
-        .approval(-1)
-        .status(ApplyStatusType.REGISTERED)
-        .expectedCount(dto.getExpectedCount())
-        .user(user)
-        .build();
   }
 }

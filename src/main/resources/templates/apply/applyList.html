@@ -8,25 +8,9 @@
     <title>신청 정보</title>
     <link rel="stylesheet" type="text/css" href="/lib/semantic/semantic.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/apply.js"></script>
+
 </head>
-<script>
-    async function counting(id) {
-        if (!confirm('개표하시겠습니까?')) {
-            return;
-        }
-
-        let response = await fetch(`/api/v1/result/${id}`, {
-            method: 'POST',
-        });
-
-        if (response && response.ok) {
-            alert("개표 끝");
-            window.location.reload();
-        } else {
-            alert(await response.text())
-        }
-    }
-</script>
 </head>
 
 <body>
@@ -63,11 +47,13 @@
                             th:href="|/apply/${list.id}/vote/making|">등록</a>
                         <a th:if="${list.hasVote} and ${list.approval}==1"
                             th:href="|/apply/${list.id}/vote/view|">조회</a>
+                        <a th:if="${list.hasVote} and ${list.approval}==1 and ${!list.voted}"
+                            th:href="|/apply/${list.id}/vote/modify|">수정</a>
                         <span th:if="${list.approval}==-1">승인후 등록</span>
                         <span th:if="${list.approval}==0"><i class="icon close"></i>등록불가</span>
                     </td>
                     <td>
-                        <a th:if="${list.approval}==1" th:href="|/apply/${list.id}/voter|">유권자등록</a>
+                        <a th:if="${list.approval}==1" th:href="|/apply/${list.id}/voter|">유권자조회</a>
                     </td>
                     <td>
                         <button th:if="!${list.hasResult}" th:onclick="|counting(${list.id});|">개표</button>

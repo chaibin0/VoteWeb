@@ -11,6 +11,7 @@ public class VoteWebApplication {
     SpringApplication.run(VoteWebApplication.class, args);
   }
 
+
   // JDK 9이상만 가능
   // @Bean
   // public ConfigurableServletWebServerFactory tomcatCustomizer() {

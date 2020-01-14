@@ -8,15 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 @RequestMapping("/user")
 public class MemberController {
-
-  @GetMapping("/sign")
-  public ModelAndView viewSignPage() {
-   
-    ModelAndView model = new ModelAndView();
-    model.setViewName("user/sign");
-    return model;
-  }
-
+  
   @GetMapping("/signup")
   public ModelAndView viewSginUpPage() {
 

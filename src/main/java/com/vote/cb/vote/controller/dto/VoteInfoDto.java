@@ -1,6 +1,9 @@
 package com.vote.cb.vote.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vote.cb.apply.domain.Apply;
+import com.vote.cb.vote.domain.VoteInfomation;
+import com.vote.cb.vote.domain.enums.VoteInfoStatusType;
 
 import java.util.List;
 
@@ -36,15 +39,18 @@ public class VoteInfoDto {
   @JsonProperty(value = "voteInfoDesc")
   String voteInfoDesc;
 
-  // 나중에 투표 제한 할것
-  @JsonProperty(value = "voteInfoCount")
-  @NotNull(message = "투표 데이터가 정상적이지 않습니다.")
-  @NumberFormat(style = Style.NUMBER)
-  @Min(1)
-  Integer voteInfoCount;
-
   @JsonProperty(value = "vote")
   @NotEmpty(message = "투표가 존재하지 않습니다.")
   @Size(min = 1, message = "투표가 존재하지 않습니다.")
   List<VoteDto> voteDto;
+
+  public VoteInfomation toVoteInfomation(Apply apply) {
+
+    return VoteInfomation.builder()
+        .apply(apply)
+        .description(voteInfoDesc.trim())
+        .name(voteInfoTitle.trim())
+        .status(VoteInfoStatusType.NORMAL)
+        .build();
+  }
 }

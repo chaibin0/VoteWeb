@@ -77,6 +77,7 @@ class VoteJpaTest {
         .expectedCount(5)
         .start(start).end(end)
         .build();
+    
     Apply apply = Apply.builder()
         .name(dto.getName())
         .email(dto.getEmail())
@@ -124,7 +125,6 @@ class VoteJpaTest {
         .applyId(this.id)
         .voteInfoTitle("투표 제목")
         .voteInfoDesc("투표 설명")
-        .voteInfoCount(10)
         .voteDto(voteDto)
         .build();
 
@@ -132,7 +132,6 @@ class VoteJpaTest {
     Apply apply = applyRepository.findById(dto.getApplyId()).orElseThrow(Exception::new);
     VoteInfomation voteInfo = VoteInfomation.builder()
         .apply(apply)
-        .count(dto.getVoteInfoCount())
         .description(dto.getVoteInfoDesc())
         .name(dto.getVoteInfoTitle())
         .status(VoteInfoStatusType.NORMAL)

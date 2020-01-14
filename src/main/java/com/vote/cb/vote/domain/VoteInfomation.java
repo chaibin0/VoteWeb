@@ -99,7 +99,6 @@ public class VoteInfomation {
 
     return VoteInfomation.builder()
         .apply(apply)
-        .count(voteInfoDto.getVoteInfoCount())
         .description(voteInfoDto.getVoteInfoDesc().trim())
         .name(voteInfoDto.getVoteInfoTitle().trim())
         .status(VoteInfoStatusType.NORMAL)

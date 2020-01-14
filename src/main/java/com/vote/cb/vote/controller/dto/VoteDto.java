@@ -1,6 +1,8 @@
 package com.vote.cb.vote.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vote.cb.vote.domain.Vote;
+import com.vote.cb.vote.domain.VoteInfomation;
 
 import java.util.List;
 
@@ -39,4 +41,15 @@ public class VoteDto {
   @NotEmpty(message = "후보자가 존재하지 않습니다.")
   @Size(min = 2, message = "최소 2명 이상의 후보자가 필요합니다.")
   List<CandidateDto> candidate;
+
+  public Vote toVote(VoteInfomation voteInfo) {
+
+    return Vote.builder()
+        .sequenceNumber(voteSeqNum)
+        .selectedNumber(voteSelNum)
+        .name(voteName.trim())
+        .electedCount(voteElecNum)
+        .voteInfo(voteInfo)
+        .build();
+  }
 }

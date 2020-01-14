@@ -70,6 +70,7 @@ class VoterJpaTest {
         .createdAt(LocalDateTime.now())
         .createdBy("ADMIN_SERVER")
         .build();
+    
     applyRepository.save(apply);
 
   }

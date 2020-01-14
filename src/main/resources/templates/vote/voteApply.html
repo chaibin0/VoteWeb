@@ -11,166 +11,32 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="/lib/semantic/semantic.min.js"></script>
+    <script src="/js/vote.js"></script>
+    <style>
+        .vote-item {
+            border: 1px solid black;
+            margin: 2px;
+            padding: 2px;
+        }
+
+        #voteForm {
+            margin-top: 30px;
+        }
+
+        .candidates {
+            padding: 10px;
+            margin: 10px;
+        }
+
+        tbody tr td:first-child {
+            width: 170px;
+            height: 60px;
+        }
+    </style>
 </head>
-<style>
-    .vote-item {
-        border: 1px solid black;
-        margin: 2px;
-        padding: 2px;
-    }
-
-    #voteForm {
-        margin-top: 30px;
-    }
-
-    .candidates {
-        padding: 10px;
-        margin: 10px;
-    }
-
-    tbody tr td:first-child {
-        width: 170px;
-        height: 60px;
-    }
-</style>
-<script th:inline="javascript">
-    let count = 0;
-
-    function addVote(e) {
-        let votes = document.getElementsByClassName('votes')[0];
-        let appendDiv = document.getElementsByClassName('vote-template')[0].childNodes[1];
-        votes.appendChild(appendDiv.cloneNode(true));
-        count++;
-    }
-
-    function removeVote(value) {
-        value.closest('.vote-item').remove();
-        count--;
-    }
-
-    function addCandidate(value) {
-        let appendDiv = document.getElementsByClassName('candidate-template')[0].childNodes[1];
-        value.closest('.vote-item').querySelector('.candidates').append(appendDiv.cloneNode(true));
-    }
-
-    function removeCandidate(value) {
-        value.closest('.candidate-item').remove();
-    }
-
-    function checkForm() {
-        let form = document.getElementById('voteForm');
-        let voteInfoTitle = form.querySelector('#title');
-        if (!voteInfoTitle.value) {
-            voteInfoTitle.scrollIntoView();
-            return false;
-        }
-        let votesDiv = form.querySelector('.votes');
-        for (let voteItem of votesDiv.querySelectorAll('.vote-item')) {
-            let voteName = voteItem.querySelector('#title').value;
-            let candidatesDiv = voteItem.querySelector('.candidates');
-            for (let candidateItem of candidatesDiv.querySelectorAll('.candidate-item')) {
-                let candidateName = candidateItem.querySelector('#candidate').value;
-            }
-        }
-
-        return true;
-    }
-
-    function sendForm(e) {
-        /* <![CDATA[ */
-        if (!checkForm(this)) {
-            return;
-        }
-        if (!confirm('등록하시겠습니까?')) {
-            return;
-        }
-
-        let form = document.getElementById('voteForm');
-        let applyId = /*[[${applyId}]]*/ ;
-        let voteInfoTitle = form.querySelector('#title').value;
-        let voteInfoDesc = form.querySelector('#description').value;
-        let voteInfoCount = count;
-        let vote = [];
-
-        let votesDiv = form.querySelector('.votes');
-        let voteNum = 1;
-        let voteList = votesDiv.querySelectorAll('.vote-item');
-
-        if (voteList.length <= 0) {
-            alert('투표 최소 한개 이상 필요합니다.');
-            return;
-        }
-        for (let voteItem of voteList) {
-            let voteSeqNum = voteNum++;
-            let voteSelNum = 1; //나중에 추가
-            let voteName = voteItem.querySelector('#title').value.trim();
-            if (!voteName) {
-                alert('투표제목을 입력하세요');
-                return;
-            }
-
-            let voteElecNum = 1; //나중에 추가
-            let candidatesDiv = voteItem.querySelector('.candidates');
-            let candidateNum = 1;
-            let candidate = [];
-            let candidateList = candidatesDiv.querySelectorAll('.candidate-item');
-
-            if (candidateList.length <= 1) {
-                alert('후보자 최소 두 명 이상 필요합니다.');
-                return;
-            }
-            for (let candidateItem of candidateList) {
-                let candidateSeqNo = candidateNum++;
-                let candidateName = candidateItem.querySelector('#candidate').value.trim();
-                if (!candidateName) {
-                    alert('후보자 이름을 입력하세요');
-                    return;
-                }
-                let candidateDesc = candidateItem.querySelector('#candidateDesc').value;
-                candidate.push({
-                    candidateSeqNo,
-                    candidateName,
-                    candidateDesc
-                });
-            }
-            vote.push({
-                voteSeqNum,
-                voteSelNum,
-                voteName,
-                voteElecNum,
-                candidate
-            })
-
-        }
-        let votes = {
-            applyId,
-            voteInfoTitle,
-            voteInfoDesc,
-            voteInfoCount,
-            vote
-        };
-
-        fetch('/api/v1/vote/making', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(votes)
-        }).then((response) => {
-
-            alert("등록 되었습니다");
-            window.location.replace("/apply");
-        }).catch((response) => {
-            alert("등록이 실패하였습니다");
-        });
-    }
-    /* ]]> */
-</script>
 
 <body>
-
     <div th:replace="fragments/header"> </div>
-
     <div class="wrapper">
         <h1 class="ui header">투표제작</h1>
         <div class="sub header">투표만드세요</div>
@@ -203,7 +69,7 @@
             <div class="votes">
             </div>
 
-            <button type="button" class="ui button" onclick="sendForm(this);">등록</button>
+            <button type="button" class="ui button" th:onclick="|sendForm(${applyId});|">등록</button>
         </div>
 
         <div class="candidate-template" style="display:none">

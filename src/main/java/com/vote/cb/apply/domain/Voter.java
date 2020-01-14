@@ -3,8 +3,10 @@ package com.vote.cb.apply.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vote.cb.apply.controller.dto.VoterDto;
 import com.vote.cb.apply.domain.enums.VoterStatusType;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,14 +16,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -77,9 +82,8 @@ public class Voter {
   @Column(name = "VOTER_VOTED_DATE")
   LocalDateTime votedDate;
 
-  @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "APPLY_ID")
-  @JsonIgnore
   Apply apply;
 
   public static Voter of(Apply apply, VoterDto voterDto) {

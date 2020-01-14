@@ -5,6 +5,7 @@ import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.Voter;
 import com.vote.cb.apply.domain.VoterRepository;
 import com.vote.cb.apply.domain.enums.VoterStatusType;
+import com.vote.cb.exception.AlreadyRegiststeredException;
 import com.vote.cb.exception.ApplyNotFoundException;
 import com.vote.cb.exception.CandidateNotFoundException;
 import com.vote.cb.exception.UnAuthorizedException;
@@ -34,6 +35,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -43,20 +45,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class VoteServiceImpl implements VoteService {
 
-  private final VoteRepository voteRepository;
+  private VoteRepository voteRepository;
 
-  private final ApplyRepository applyRepository;
+  private ApplyRepository applyRepository;
 
-  private final VoteInfoRepository voteInfoRepository;
+  private VoteInfoRepository voteInfoRepository;
 
-  private final CandidateRepository candidateRepository;
+  private CandidateRepository candidateRepository;
 
-  private final VoterRepository voterRepository;
+  private VoterRepository voterRepository;
 
-  private final ResultRepository resultRepository;
+  private ResultRepository resultRepository;
+
+  public VoteServiceImpl(VoteRepository voteRepository, ApplyRepository applyRepository,
+      VoteInfoRepository voteInfoRepository, CandidateRepository candidateRepository,
+      VoterRepository voterRepository, ResultRepository resultRepository) {
+
+    this.voteRepository = voteRepository;
+    this.applyRepository = applyRepository;
+    this.voteInfoRepository = voteInfoRepository;
+    this.candidateRepository = candidateRepository;
+    this.voterRepository = voterRepository;
+    this.resultRepository = resultRepository;
+  }
+
 
   @Override
   @Transactional
@@ -70,8 +84,11 @@ public class VoteServiceImpl implements VoteService {
       throw new UnAuthorizedException();
     }
 
-    VoteInfomation voteInfo = VoteInfomation.of(apply, voteInfoDto);
-    VoteInfomation saveVoteInfo = voteInfoRepository.save(voteInfo);
+    if (apply.isHasVote()) {
+      throw new AlreadyRegiststeredException();
+    }
+
+    VoteInfomation saveVoteInfo = voteInfoRepository.save(voteInfoDto.toVoteInfomation(apply));
 
     List<Vote> voteList = saveVote(saveVoteInfo, voteInfoDto.getVoteDto());
     saveVoteInfo.setVoteList(voteList);
@@ -90,9 +107,7 @@ public class VoteServiceImpl implements VoteService {
     List<Vote> voteList = new ArrayList<>();
 
     for (VoteDto voteDto : voteDtoList) {
-      Vote vote = Vote.of(voteInfo, voteDto);
-      Vote saveVote = voteRepository.save(vote);
-
+      Vote saveVote = voteRepository.save(voteDto.toVote(voteInfo));
       List<Candidate> candidateList = saveCandidate(saveVote, voteDto.getCandidate());
       saveVote.setCandidateList(candidateList);
       voteList.add(saveVote);
@@ -106,8 +121,7 @@ public class VoteServiceImpl implements VoteService {
 
     List<Candidate> candidateList = new ArrayList<>();
     for (CandidateDto candidateDto : candidateDtoList) {
-      Candidate candidate = Candidate.of(vote, candidateDto);
-      Candidate saveCandidate = candidateRepository.save(candidate);
+      Candidate saveCandidate = candidateRepository.save(candidateDto.toCandidate(vote));
       candidateList.add(saveCandidate);
     }
 
@@ -116,10 +130,11 @@ public class VoteServiceImpl implements VoteService {
 
 
   @Override
-  public ResponseEntity<?> authVoterInfo(String uid, VoteSignDto dto, HttpSession session) {
+  public ResponseEntity<?> authVoterInfo(VoteSignDto dto, HttpSession session) {
 
-    Voter voter = voterRepository.findByNameAndPhoneAndSsn(dto.getName(), dto.getPhone(), uid)
-        .orElseThrow(VoterNotFoundException::new);
+    Voter voter =
+        voterRepository.findByNameAndPhoneAndSsn(dto.getName(), dto.getPhone(), dto.getUid())
+            .orElseThrow(VoterNotFoundException::new);
 
     if (voter == null) {
       return ResponseEntity.badRequest().body("투표정보가 정확하지 않습니다.");
@@ -137,6 +152,7 @@ public class VoteServiceImpl implements VoteService {
 
     session.setAttribute("name", voter.getName());
     session.setAttribute("phone", voter.getPhone());
+    session.setAttribute("uid", voter.getSsn());
     return ResponseEntity.ok().build();
   }
 
@@ -147,7 +163,7 @@ public class VoteServiceImpl implements VoteService {
   }
 
   @Override
-  public VoteInfomation getVoteList(String name, String phone, String uid) throws Exception {
+  public VoteInfomation getVoteList(String name, String phone, String uid) {
 
     Voter voter = voterRepository.findByNameAndPhoneAndSsn(name, phone, uid)
         .orElseThrow(VoterNotFoundException::new);
@@ -218,6 +234,7 @@ public class VoteServiceImpl implements VoteService {
 
   // 수정할것
   @Override
+  @Transactional
   public ResponseEntity<?> modifyVoteInfo(User user, @Valid VoteInfoDto dto) {
 
     Apply apply =
@@ -230,11 +247,10 @@ public class VoteServiceImpl implements VoteService {
     VoteInfomation voteInfo =
         voteInfoRepository.findByApply(apply).orElseThrow(VoteInfoNotFoundException::new);
 
-    voteInfo.setCount(dto.getVoteInfoCount())
-        .setDescription(dto.getVoteInfoDesc())
+    voteInfo.setDescription(dto.getVoteInfoDesc())
         .setName(dto.getVoteInfoTitle());
 
-    voteRepository.deleteAll(voteInfo.getVoteList());
+    voteRepository.deleteInBatch(voteInfo.getVoteList());
     saveVote(voteInfo, dto.getVoteDto());
 
     voteInfoRepository.save(voteInfo);

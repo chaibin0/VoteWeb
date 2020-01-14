@@ -1,3 +1,5 @@
+/*jshint esversion: 8 */
+
 let checkId = false;
 
 function changeId() {
@@ -47,6 +49,7 @@ async function signup() {
 
     let name = document.getElementById('name').value;
     let phone = document.getElementById('phone').value;
+    let email = document.getElementById('email').value;
 
     let response = await fetch('/api/v1/user/signup', {
         method: 'POST',
@@ -57,6 +60,7 @@ async function signup() {
             id,
             name,
             password,
+            email,
             phone
         })
     });

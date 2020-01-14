@@ -3,6 +3,9 @@ package com.vote.cb.apply.controller.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vote.cb.apply.domain.Apply;
+import com.vote.cb.apply.domain.enums.ApplyStatusType;
+import com.vote.cb.user.domain.Member;
+
 import java.time.LocalDateTime;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Future;
@@ -63,19 +66,19 @@ public class ApplyRequestDto {
   @JsonProperty("voted")
   private boolean voted;
 
-  public static ApplyRequestDto of(Apply apply) {
+  public Apply toApply(Member member) {
 
-    return ApplyRequestDto.builder()
-        .id(apply.getId())
-        .name(apply.getName())
-        .email(apply.getEmail())
-        .phone(apply.getPhone())
-        .title(apply.getTitle())
-        .expectedCount(apply.getExpectedCount())
-        .start(apply.getStart())
-        .end(apply.getEnd())
-        .status(apply.getStatus().toString())
-        .voted(apply.isVoted())
+    return Apply.builder()
+        .name(name)
+        .email(email)
+        .phone(phone)
+        .title(title)
+        .start(start)
+        .end(end)
+        .approval(-1)
+        .status(ApplyStatusType.REGISTERED)
+        .expectedCount(expectedCount)
+        .user(member)
         .build();
   }
 }

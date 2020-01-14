@@ -1,6 +1,8 @@
 package com.vote.cb.vote.controller.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vote.cb.vote.domain.Candidate;
+import com.vote.cb.vote.domain.Vote;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
@@ -26,4 +28,14 @@ public class CandidateDto {
 
   @JsonProperty(value = "candidateDesc")
   String candidateDesc;
+
+  public Candidate toCandidate(Vote vote) {
+
+    return Candidate.builder()
+        .sequenceNumber(candidateSeqNo)
+        .name(candidateName.trim())
+        .description(candidateDesc.trim())
+        .vote(vote)
+        .build();
+  }
 }

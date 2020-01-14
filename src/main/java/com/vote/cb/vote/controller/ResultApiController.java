@@ -2,6 +2,8 @@ package com.vote.cb.vote.controller;
 
 import com.vote.cb.vote.service.ResultService;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -12,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/result")
-@RequiredArgsConstructor
 public class ResultApiController {
 
-  private final ResultService resultService;
+  @Autowired
+  private ResultService resultService;
 
   @PostMapping("/{applyId}")
   public ResponseEntity<?> countVote(@AuthenticationPrincipal User user,

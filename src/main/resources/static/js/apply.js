@@ -6,24 +6,25 @@ function checkApplyForm() {
 
     let name = document.getElementById('name').value.trim();
     let email = document.getElementById('email').value.trim();
-    let phone1 = document.getElementById('phone1').value.trim();
-    let phone2 = document.getElementById('phone2').value.trim();
-    let phone3 = document.getElementById('phone3').value.trim();
+    let phone1 = document.getElementById('phone1').value;
+    let phone2 = document.getElementById('phone2').value;
+    let phone3 = document.getElementById('phone3').value;
 
     if (!name) {
         alert("이름을 입력하세요");
         return false;
     }
 
-    if (phone1.value != '010') {
-        alert('휴대전화번호를 잘못 입력하셨습니다.');
-        return false;
-    }
+    
+    // if (phone1.value != '010') {
+    //     alert('휴대전화번호를 잘못 입력하셨습니다.');
+    //     return false;
+    // }
 
-    if (!phoneReg.exec(phone2) || !phoneReg.exec(phone3)) {
-        alert("휴대전화번호를 잘못 입력하셨습니다.");
-        return false;
-    }
+    // if (!phoneReg.exec(phone2) || !phoneReg.exec(phone3)) {
+    //     alert("휴대전화번호를 잘못 입력하셨습니다.");
+    //     return false;
+    // }
 
     let voteTitle = document.getElementById('voteTitle').value.trim();
 
@@ -180,6 +181,10 @@ function cancleModify() {
 
 async function modifyApply(id) {
 
+    if(!confirm('수정할 시 관리자로부터 재 인증이 필요합니다. 수정하시겠습니까?')){
+        return;
+    }
+
     let name = document.getElementById('name').value;
     let email = document.getElementById('email').value;
     let phone1 = document.getElementById('phone1').value;
@@ -243,7 +248,7 @@ async function modifyApply(id) {
         alert("성공");
         window.location.reload();
     } else {
-        console.log(error);
+        console.log(await response.text());
         alert('에러@@');
         window.location.reload();
     }
@@ -264,5 +269,22 @@ async function removeApply(id) {
     } else {
         console.log(error);
         alert('에러@@');
+    }
+}
+
+async function counting(id) {
+    if (!confirm('개표하시겠습니까?')) {
+        return;
+    }
+
+    let response = await fetch(`/api/v1/result/${id}`, {
+        method: 'POST',
+    });
+
+    if (response && response.ok) {
+        alert("개표 끝");
+        window.location.reload();
+    } else {
+        alert(await response.text())
     }
 }

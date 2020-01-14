@@ -16,18 +16,23 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-  @Autowired
   private MemberRepository userRepository;
+
+  public UserDetailsServiceImpl(MemberRepository userRepository) {
+
+    this.userRepository = userRepository;
+  }
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
     Member member =
         userRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException(""));
-    
+
     Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-    
+
     grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + member.getRole().toString()));
+
     return User.builder()
         .username(member.getUserId())
         .password(member.getPassword())

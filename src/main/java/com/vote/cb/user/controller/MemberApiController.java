@@ -1,5 +1,11 @@
 package com.vote.cb.user.controller;
 
+import com.vote.cb.user.controller.dto.CheckUserIdResponseDto;
+import com.vote.cb.user.controller.dto.MemberResponseDto;
+import com.vote.cb.user.controller.dto.SignUpDto;
+import com.vote.cb.user.service.MemberService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -10,18 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.vote.cb.user.controller.dto.CheckUserIdResponseDto;
-import com.vote.cb.user.controller.dto.MemberResponseDto;
-import com.vote.cb.user.controller.dto.SignUpDto;
-import com.vote.cb.user.service.MemberService;
-import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/api/v1/user")
-@RequiredArgsConstructor
 public class MemberApiController {
 
-  private final MemberService userService;
+  @Autowired
+  private MemberService userService;
 
   @PostMapping("/signup")
   public ResponseEntity<?> signUpUser(@RequestBody SignUpDto dto) {

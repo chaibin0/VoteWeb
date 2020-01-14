@@ -16,32 +16,45 @@ import com.vote.cb.vote.domain.Result;
 import com.vote.cb.vote.domain.ResultRepository;
 import com.vote.cb.vote.domain.VoteInfoRepository;
 import com.vote.cb.vote.domain.VoteInfomation;
+
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.NonNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@RequiredArgsConstructor
 public class ResultServiceImpl implements ResultService {
 
-  private final ResultRepository resultRepository;
+  private ResultRepository resultRepository;
 
-  private final ApplyRepository applyRepository;
+  private ApplyRepository applyRepository;
 
-  private final VoteInfoRepository voteInfoRepository;
+  private VoteInfoRepository voteInfoRepository;
 
-  private final CandidateRepository candidateRepository;
+  private CandidateRepository candidateRepository;
 
-  private final VoterRepository voterRepository;
+  private VoterRepository voterRepository;
 
+  public ResultServiceImpl(ResultRepository resultRepository, ApplyRepository applyRepository,
+      VoteInfoRepository voteInfoRepository, CandidateRepository candidateRepository,
+      VoterRepository voterRepository) {
+
+    this.resultRepository = resultRepository;
+    this.applyRepository = applyRepository;
+    this.voteInfoRepository = voteInfoRepository;
+    this.candidateRepository = candidateRepository;
+    this.voterRepository = voterRepository;
+  }
 
   @Override
   @Transactional

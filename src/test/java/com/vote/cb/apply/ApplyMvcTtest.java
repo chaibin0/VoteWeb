@@ -7,9 +7,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vote.cb.apply.controller.ApplyApiController;
 import com.vote.cb.apply.controller.dto.ApplyRequestDto;
 import com.vote.cb.apply.service.ApplyService;
+
+import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -32,8 +35,8 @@ class ApplyMvcTtest {
   @MockBean
   ApplyService applyService;
 
-  @MockBean
-  User user;
+  @Autowired
+  ObjectMapper mapper;
 
   @DisplayName("이용신청서 등록 Controller Test")
   @Test
@@ -43,18 +46,20 @@ class ApplyMvcTtest {
     given(applyService.registerApply(Mockito.any(User.class), Mockito.any(ApplyRequestDto.class)))
         .willReturn(ResponseEntity.created(null).build());
 
+    ApplyRequestDto dto = ApplyRequestDto.builder()
+        .name("임채빈")
+        .email("abc@naver.com")
+        .phone("01000000000")
+        .title("테스트")
+        .expectedCount(10)
+        .start(LocalDateTime.now().plusDays(1))
+        .end(LocalDateTime.now().plusDays(10))
+        .build();
+
+
     mvc.perform(post("/api/v1/apply")
         .contentType(MediaType.APPLICATION_JSON)
-        .content(
-            "{\r\n"
-                + "  \"name\":\"임채빈\",\r\n"
-                + "  \"email\":\"abc@naver.com\",\r\n"
-                + "  \"phone\":\"01000000000\",\r\n"
-                + "  \"voteTitle\":\"테스트\",\r\n"
-                + "  \"expectedCount\":\"10\",\r\n"
-                + "  \"startVote\":\"2020-01-03T01:01:00\",\r\n"
-                + "  \"endVote\":\"2020-01-06T02:02:00\"\r\n"
-                + "}"))
+        .content(mapper.writeValueAsString(dto)))
         .andExpect(status().isCreated())
         .andDo(print());
   }
@@ -80,18 +85,20 @@ class ApplyMvcTtest {
     given(applyService.modifyApply(Mockito.any(User.class), Mockito.any(ApplyRequestDto.class)))
         .willReturn(ResponseEntity.ok().build());
 
+
+    ApplyRequestDto dto = ApplyRequestDto.builder()
+        .name("임채빈")
+        .email("abc@naver.com")
+        .phone("01000000000")
+        .title("테스트")
+        .expectedCount(10)
+        .start(LocalDateTime.now().plusDays(1))
+        .end(LocalDateTime.now().plusDays(10))
+        .build();
+
     mvc.perform(put("/api/v1/apply")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\r\n"
-            + "  \"id\": 65,\r\n"
-            + "  \"name\":\"임채빈\",\r\n"
-            + "  \"email\":\"abc@naver.com\",\r\n"
-            + "  \"phone\":\"01000000000\",\r\n"
-            + "  \"voteTitle\":\"2번째 테스트\",\r\n"
-            + "  \"expectedCount\":\"10\",\r\n"
-            + "  \"startVote\":\"2020-01-03T01:01:00\",\r\n"
-            + "  \"endVote\":\"2020-01-06T02:02:00\"\r\n"
-            + "}"))
+        .content(mapper.writeValueAsString(dto)))
         .andDo(print())
         .andExpect(status().isOk());
   }

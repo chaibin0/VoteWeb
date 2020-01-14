@@ -5,16 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>정보 입력</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" type="text/css" href="/lib/semantic/semantic.min.css">
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
         integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
     <script src="/lib/semantic/semantic.min.js"></script>
+    <script src="/js/vote.js"></script>
 </head>
 
 <body>
-
     <div th:replace="fragments/header"></div>
     <div class="wrapper">
         <div id="error" class="ui secondary inverted red segment" style="display : none;">
@@ -37,42 +37,15 @@
                             <input type="text" name="phone3" id="phone3" placeholder="XXXX" pattern="[0-9]{4}">
                         </div>
                     </div>
+                    <div class="field">
+                        <div class="ui input">
+                            <input type="text" name="uid" id="uid" placeholder="부여받은 코드명">
+                        </div>
+                    </div>
                     <div class="error"></div>
                     <button class="ui button" onclick="signinByLink()">확인</button>
             </div>
         </div>
     </div>
 </body>
-<script th:inline="javascript">
-    async function signinByLink() {
-        let name = document.getElementById('name').value;
-        let phone1 = document.getElementById('phone1').value;
-        let phone2 = document.getElementById('phone2').value;
-        let phone3 = document.getElementById('phone3').value;
-        let phone = phone1 + phone2 + phone3;
-        /*<![CDATA[*/
-        let uid = /*[[ ${uid} ]]*/ ;
-        /*]]*/
-        let url = `/api/v1/vote/${uid}/sign/`;
-        let response = await fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name,
-                phone
-            })
-        });
-
-        if (response && response.ok) {
-            window.location.replace(`/vote/${uid}/voting`)
-        } else {
-            let error = document.getElementById('error')
-            error.innerText = await response.json();
-            error.style.display = 'block';
-        }
-    }
-</script>
-
 </html>

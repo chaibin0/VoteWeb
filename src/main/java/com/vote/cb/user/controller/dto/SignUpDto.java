@@ -1,15 +1,26 @@
 package com.vote.cb.user.controller.dto;
 
+import com.vote.cb.user.domain.Member;
+import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.enums.UserStatusType;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class SignUpDto {
 
   @NotBlank(message = "아이디를 입력해주세요")
@@ -28,4 +39,18 @@ public class SignUpDto {
   @NotBlank(message = "이메일을 입력해주세요")
   @Email(message = "이메일양식에 맞춰 입력하세요")
   String email;
+
+  public Member toMember(PasswordEncoder passwordEncoder) {
+
+    return Member.builder()
+        .userId(id)
+        .password(passwordEncoder.encode(password))
+        .name(name)
+        .email(email)
+        .phone(phone)
+        .status(UserStatusType.NORMAL)
+        .role(UserRole.USER).build();
+  }
+
+
 }
