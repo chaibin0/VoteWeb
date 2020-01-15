@@ -75,9 +75,8 @@ public class ApplyRequestDto {
         .title(title)
         .start(start)
         .end(end)
-        .approval(-1)
-        .status(ApplyStatusType.REGISTERED)
         .expectedCount(expectedCount)
+        .status(ApplyStatusType.REGISTERED)
         .user(member)
         .build();
   }

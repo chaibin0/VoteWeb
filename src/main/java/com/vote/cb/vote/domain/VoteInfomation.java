@@ -95,13 +95,4 @@ public class VoteInfomation {
     this.current++;
   }
 
-  public static VoteInfomation of(Apply apply, VoteInfoDto voteInfoDto) {
-
-    return VoteInfomation.builder()
-        .apply(apply)
-        .description(voteInfoDto.getVoteInfoDesc().trim())
-        .name(voteInfoDto.getVoteInfoTitle().trim())
-        .status(VoteInfoStatusType.NORMAL)
-        .build();
-  }
 }

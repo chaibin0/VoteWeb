@@ -41,7 +41,7 @@ class AdminMvcTest {
   @Test
   public void rejectTest() throws Exception {
 
-    given(applyService.rejectApply(Mockito.anyLong()))
+    given(adminService.rejectApply(Mockito.anyLong()))
         .willReturn(ResponseEntity.accepted().build());
 
     mvc.perform(post("/api/v1/admin/apply/reject")
@@ -55,7 +55,7 @@ class AdminMvcTest {
   @Test
   public void approvalTest() throws Exception {
 
-    given(applyService.approvalApply(Mockito.eq(2L)))
+    given(adminService.approvalApply(Mockito.eq(2L)))
         .willReturn(ResponseEntity.accepted().build());
     mvc.perform(post("/api/v1/admin/apply/approval")
         .contentType(MediaType.APPLICATION_JSON)

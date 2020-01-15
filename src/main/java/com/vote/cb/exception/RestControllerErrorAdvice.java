@@ -1,14 +1,12 @@
 package com.vote.cb.exception;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -79,6 +77,8 @@ public class RestControllerErrorAdvice {
   @ExceptionHandler(VoterNotFoundException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundVoter(VoterNotFoundException e) {
+
+    log.info(e.getMessage());
 
     return ResponseEntity.badRequest()
         .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));

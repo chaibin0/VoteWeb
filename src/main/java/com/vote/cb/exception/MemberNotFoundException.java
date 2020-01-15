@@ -10,6 +10,4 @@ public class MemberNotFoundException extends RuntimeException {
 
     return "개인정보를 찾지 못했습니다.";
   }
-
-
 }

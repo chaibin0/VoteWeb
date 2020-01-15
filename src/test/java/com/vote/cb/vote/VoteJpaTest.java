@@ -6,7 +6,8 @@ import com.vote.cb.apply.controller.dto.ApplyRequestDto;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
-import com.vote.cb.exception.VoteInfoNotFoundException;
+import com.vote.cb.componant.VoteAuditorAware;
+import com.vote.cb.config.JpaConfig;
 import com.vote.cb.vote.controller.dto.CandidateDto;
 import com.vote.cb.vote.controller.dto.VoteDto;
 import com.vote.cb.vote.controller.dto.VoteInfoDto;
@@ -16,7 +17,6 @@ import com.vote.cb.vote.domain.Vote;
 import com.vote.cb.vote.domain.VoteInfoRepository;
 import com.vote.cb.vote.domain.VoteInfomation;
 import com.vote.cb.vote.domain.VoteRepository;
-import com.vote.cb.vote.domain.enums.VoteInfoStatusType;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -29,10 +29,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 
 @DataJpaTest
+@Import({JpaConfig.class, VoteAuditorAware.class})
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 class VoteJpaTest {
 
@@ -47,6 +49,7 @@ class VoteJpaTest {
 
   @Autowired
   ApplyRepository applyRepository;
+
 
   LocalDateTime start;
 
@@ -77,7 +80,7 @@ class VoteJpaTest {
         .expectedCount(5)
         .start(start).end(end)
         .build();
-    
+
     Apply apply = Apply.builder()
         .name(dto.getName())
         .email(dto.getEmail())
@@ -130,15 +133,7 @@ class VoteJpaTest {
 
 
     Apply apply = applyRepository.findById(dto.getApplyId()).orElseThrow(Exception::new);
-    VoteInfomation voteInfo = VoteInfomation.builder()
-        .apply(apply)
-        .description(dto.getVoteInfoDesc())
-        .name(dto.getVoteInfoTitle())
-        .status(VoteInfoStatusType.NORMAL)
-        .createdAt(LocalDateTime.now())
-        .createdBy("ADMIN_SERVER")
-        .build();
-
+    VoteInfomation voteInfo = dto.toVoteInfomation(apply);
     VoteInfomation saveVoteInfo = voteInfoRepository.save(voteInfo);
 
     List<Vote> voteList = saveVote(saveVoteInfo, dto.getVoteDto());
@@ -159,16 +154,8 @@ class VoteJpaTest {
     List<Vote> voteList = new ArrayList<>();
 
     for (VoteDto dto : voteDtoList) {
-      Vote vote = Vote.builder()
-          .sequenceNumber(dto.getVoteSeqNum())
-          .selectedNumber(dto.getVoteSelNum())
-          .name(dto.getVoteName())
-          .electedCount(dto.getVoteElecNum())
-          .voteInfo(voteInfo)
-          .build();
-
+      Vote vote = dto.toVote(voteInfo);
       Vote saveVote = voteRepository.save(vote);
-
       List<Candidate> candidateList = saveCandidate(saveVote, dto.getCandidate());
       saveVote.setCandidateList(candidateList);
       voteList.add(saveVote);
@@ -181,13 +168,7 @@ class VoteJpaTest {
 
     List<Candidate> candidateList = new ArrayList<>();
     for (CandidateDto dto : candidateDtoList) {
-      Candidate candidate = Candidate.builder()
-          .sequenceNumber(dto.getCandidateSeqNo())
-          .name(dto.getCandidateName())
-          .description(dto.getCandidateDesc())
-          .vote(vote)
-          .build();
-
+      Candidate candidate = dto.toCandidate(vote);
       Candidate saveCandidate = candidateRepository.save(candidate);
       candidateList.add(saveCandidate);
     }

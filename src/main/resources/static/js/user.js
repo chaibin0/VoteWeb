@@ -6,7 +6,6 @@ function changeId() {
     let div = document.getElementById('checkResult');
     checkId = false;
     div.innerText = '';
-
 }
 
 function checkSameId() {
@@ -28,9 +27,7 @@ function checkSameId() {
         }
     }).catch((error) => {
         console.log(error);
-    })
-
-
+    });
 }
 
 async function signup() {

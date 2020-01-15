@@ -495,98 +495,13 @@ class ApplyServiceTest {
   @Test
   void testApprovalApply() {
 
-    apply = Apply.builder()
-        .id(1L)
-        .name("이름")
-        .email("abc@naver.com")
-        .phone("01000000000")
-        .title("첫번째")
-        .expectedCount(1)
-        .start(start)
-        .end(end)
-        .createdAt(LocalDateTime.now())
-        .createdBy("TEST_SERVER")
-        .status(ApplyStatusType.REGISTERED)
-        .user(member)
-        .hasVote(true)
-        .voted(false)
-        .build();
 
-    Apply savedapply = Apply.builder()
-        .id(1L)
-        .name("이름")
-        .email("abc@naver.com")
-        .phone("01000000000")
-        .title("첫번째")
-        .expectedCount(1)
-        .start(start)
-        .end(end)
-        .createdAt(LocalDateTime.now())
-        .createdBy("TEST_SERVER")
-        .status(ApplyStatusType.REGISTERED)
-        .user(member)
-        .hasVote(true)
-        .voted(false)
-        .approval(1)
-        .build();
-
-    Long applyId = 1L;
-
-    when(applyRepository.findById(applyId)).thenReturn(Optional.of(apply));
-    when(applyRepository.save(Mockito.any(Apply.class))).thenReturn(savedapply);
-
-    ResponseEntity<?> responseEntity = applyService.approvalApply(applyId);
-    verify(applyRepository, times(1)).save(Mockito.any(Apply.class));
-    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
   }
 
   @DisplayName("rejectApply() test")
   @Test
   void testRejectApply() {
 
-    apply = Apply.builder()
-        .id(1L)
-        .name("이름")
-        .email("abc@naver.com")
-        .phone("01000000000")
-        .title("첫번째")
-        .expectedCount(1)
-        .start(start)
-        .end(end)
-        .createdAt(LocalDateTime.now())
-        .createdBy("TEST_SERVER")
-        .status(ApplyStatusType.REGISTERED)
-        .user(member)
-        .hasVote(true)
-        .voted(false)
-        .build();
-
-    Apply savedapply = Apply.builder()
-        .id(1L)
-        .name("이름")
-        .email("abc@naver.com")
-        .phone("01000000000")
-        .title("첫번째")
-        .expectedCount(1)
-        .start(start)
-        .end(end)
-        .createdAt(LocalDateTime.now())
-        .createdBy("TEST_SERVER")
-        .status(ApplyStatusType.REGISTERED)
-        .user(member)
-        .hasVote(true)
-        .voted(false)
-        .approval(0)
-        .build();
-
-    Long applyId = 1L;
-
-    when(applyRepository.findById(applyId)).thenReturn(Optional.of(apply));
-    when(applyRepository.save(Mockito.any(Apply.class))).thenReturn(savedapply);
-
-    ResponseEntity<?> responseEntity = applyService.approvalApply(applyId);
-    verify(applyRepository, times(1)).save(Mockito.any(Apply.class));
-    assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
   }
 
 }

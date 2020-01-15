@@ -21,13 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/admin")
 public class AdminApiController {
-
+  
   @Autowired
   private AdminService adminService;
-
-  //관리자기능은 adminService로 옮길 예정
-  @Autowired
-  private ApplyService applyService;
 
   @GetMapping("/user")
   public ResponseEntity<Member> getUser(@RequestParam(name = "id") String id) {
@@ -44,14 +40,13 @@ public class AdminApiController {
   @PostMapping("/apply/reject")
   public ResponseEntity<?> rejectApply(@RequestBody @Valid ApprovalDto dto) {
 
-    return applyService.rejectApply(dto.getId());
+    return adminService.rejectApply(dto.getId());
   }
 
   @PostMapping("/apply/approval")
   public ResponseEntity<?> approvalApply(@RequestBody @Valid ApprovalDto dto) {
 
-    return applyService.approvalApply(dto.getId());
-
+    return adminService.approvalApply(dto.getId());
   }
 
 

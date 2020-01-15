@@ -61,15 +61,4 @@ public class Vote {
   @JoinColumn(name = "VOTEINFO_ID")
   @JsonBackReference
   VoteInfomation voteInfo;
-
-  public static Vote of(VoteInfomation voteInfo, VoteDto voteDto) {
-
-    return Vote.builder()
-        .sequenceNumber(voteDto.getVoteSeqNum())
-        .selectedNumber(voteDto.getVoteSelNum())
-        .name(voteDto.getVoteName().trim())
-        .electedCount(voteDto.getVoteElecNum())
-        .voteInfo(voteInfo)
-        .build();
-  }
 }

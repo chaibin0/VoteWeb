@@ -7,7 +7,7 @@ import com.vote.cb.vote.domain.enums.VoteInfoStatusType;
 
 import java.util.List;
 
-import javax.validation.constraints.Min;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -42,6 +42,7 @@ public class VoteInfoDto {
   @JsonProperty(value = "vote")
   @NotEmpty(message = "투표가 존재하지 않습니다.")
   @Size(min = 1, message = "투표가 존재하지 않습니다.")
+  @Valid
   List<VoteDto> voteDto;
 
   public VoteInfomation toVoteInfomation(Apply apply) {

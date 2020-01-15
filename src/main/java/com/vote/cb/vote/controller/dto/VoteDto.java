@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
@@ -22,11 +23,11 @@ import lombok.NoArgsConstructor;
 public class VoteDto {
 
   @JsonProperty(value = "voteSeqNum")
-  @NotEmpty(message = "투표가 존재하지 않습니다.")
+  @NotNull(message = "투표가 존재하지 않습니다.")
   int voteSeqNum;
 
   @JsonProperty(value = "voteSelNum")
-  @NotEmpty(message = "투표가 존재하지 않습니다.")
+  @NotNull(message = "투표가 존재하지 않습니다.")
   int voteSelNum;
 
   @JsonProperty(value = "voteName")
@@ -34,7 +35,7 @@ public class VoteDto {
   String voteName;
 
   @JsonProperty(value = "voteElecNum")
-  @NotEmpty(message = "투표 당선 수를 입력하세요")
+  @NotNull(message = "투표 당선 수를 입력하세요")
   int voteElecNum;
 
   @JsonProperty(value = "candidate")

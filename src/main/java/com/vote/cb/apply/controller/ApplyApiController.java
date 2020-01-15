@@ -51,7 +51,7 @@ public class ApplyApiController {
   @PutMapping("")
   public ResponseEntity<?> modifyApply(@AuthenticationPrincipal User user,
       @RequestBody @Valid ApplyRequestDto dto) {
-    
+
     return applyService.modifyApply(user, dto);
   }
 

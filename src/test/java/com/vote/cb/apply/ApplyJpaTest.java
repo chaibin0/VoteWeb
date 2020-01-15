@@ -1,12 +1,13 @@
 package com.vote.cb.apply;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 import com.vote.cb.apply.controller.dto.ApplyRequestDto;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
+import com.vote.cb.componant.VoteAuditorAware;
+import com.vote.cb.config.JpaConfig;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,9 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
+@Import({JpaConfig.class, VoteAuditorAware.class})
 class ApplyJpaTest {
 
   @Autowired
@@ -31,15 +34,9 @@ class ApplyJpaTest {
 
   LocalDateTime end;
 
-  LocalDateTime createdAt;
-
-  String createdBy;
-
   @BeforeEach
   void setUp() throws Exception {
 
-    createdAt = LocalDateTime.now();
-    createdBy = "ADMIN_SERVER";
     start = LocalDateTime.of(2019, 12, 10, 10, 13);
     end = LocalDateTime.of(2019, 12, 12, 10, 13);
   }
@@ -60,18 +57,7 @@ class ApplyJpaTest {
         .build();
 
     // when
-    Apply apply = Apply.builder()
-        .name(dto.getName())
-        .email(dto.getEmail())
-        .phone(dto.getPhone())
-        .title(dto.getTitle())
-        .expectedCount(dto.getExpectedCount())
-        .start(dto.getStart())
-        .end(dto.getEnd())
-        .createdAt(createdAt)
-        .createdBy(createdBy)
-        .status(ApplyStatusType.REGISTERED)
-        .build();
+    Apply apply = dto.toApply(null);
 
     // then
     Apply saveApply = applyRepository.save(apply);
@@ -107,8 +93,6 @@ class ApplyJpaTest {
         .expectedCount(dto.getExpectedCount())
         .start(dto.getStart())
         .end(dto.getEnd())
-        .createdAt(createdAt)
-        .createdBy(createdBy)
         .status(ApplyStatusType.REGISTERED)
         .build();
 
@@ -134,18 +118,7 @@ class ApplyJpaTest {
         .end(end)
         .build();
 
-    Apply apply = Apply.builder()
-        .name(dto.getName())
-        .email(dto.getEmail())
-        .phone(dto.getPhone())
-        .title(dto.getTitle())
-        .expectedCount(dto.getExpectedCount())
-        .start(dto.getStart())
-        .end(dto.getEnd())
-        .createdAt(createdAt)
-        .createdBy(createdBy)
-        .status(ApplyStatusType.REGISTERED)
-        .build();
+    Apply apply = dto.toApply(null);
 
     Apply newApply = applyRepository.save(apply);
 
@@ -169,18 +142,7 @@ class ApplyJpaTest {
         .expectedCount(5)
         .start(start).end(end)
         .build();
-    Apply apply = Apply.builder()
-        .name(dto.getName())
-        .email(dto.getEmail())
-        .phone(dto.getPhone())
-        .title(dto.getTitle())
-        .expectedCount(dto.getExpectedCount())
-        .start(dto.getStart())
-        .end(dto.getEnd())
-        .createdAt(createdAt)
-        .createdBy(createdBy)
-        .status(ApplyStatusType.REGISTERED)
-        .build();
+    Apply apply = dto.toApply(null);
 
     Apply newApply = applyRepository.save(apply);
 
@@ -216,17 +178,6 @@ class ApplyJpaTest {
     assertThat(modifiedApply.getTitle()).isEqualTo("수정");
     assertThat(modifiedApply.getStart()).isEqualTo(start);
     assertThat(modifiedApply.getEnd()).isEqualTo(end);
-  }
-
-  @DisplayName("투표시작 테스트")
-  @Test
-  public void voteStartTest() {
-
-    // List<Apply> applyList =
-    // applyRepository.findAllByVotedEqualsAndStartLessThanEqual(false, LocalDateTime.now());
-
-    fail("미구현");
-
   }
 
   public static void print(Apply apply) {

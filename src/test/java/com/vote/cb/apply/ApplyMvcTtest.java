@@ -72,6 +72,7 @@ class ApplyMvcTtest {
 
     given(applyService.removeApply(Mockito.any(User.class), Mockito.anyLong()))
         .willReturn(ResponseEntity.accepted().build());
+    
     mvc.perform(delete("/api/v1/apply/1"))
         .andExpect(status().isAccepted())
         .andDo(print());
@@ -84,7 +85,6 @@ class ApplyMvcTtest {
 
     given(applyService.modifyApply(Mockito.any(User.class), Mockito.any(ApplyRequestDto.class)))
         .willReturn(ResponseEntity.ok().build());
-
 
     ApplyRequestDto dto = ApplyRequestDto.builder()
         .name("임채빈")
@@ -101,5 +101,6 @@ class ApplyMvcTtest {
         .content(mapper.writeValueAsString(dto)))
         .andDo(print())
         .andExpect(status().isOk());
+
   }
 }

@@ -86,14 +86,4 @@ public class Voter {
   @JoinColumn(name = "APPLY_ID")
   Apply apply;
 
-  public static Voter of(Apply apply, VoterDto voterDto) {
-
-    return Voter.builder()
-        .name(voterDto.getVoterName().trim())
-        .phone(voterDto.getVoterPhone())
-        .apply(apply)
-        .ssn(UUID.randomUUID().toString().replace("-", ""))
-        .status(VoterStatusType.UNVOTED)
-        .build();
-  }
 }

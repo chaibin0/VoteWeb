@@ -27,6 +27,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
+import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -39,11 +40,12 @@ import org.springframework.security.core.userdetails.User;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 @Accessors(chain = true)
+@Where(clause = "APP_DELETED = false")
 public class Apply {
 
   @Id
@@ -112,6 +114,9 @@ public class Apply {
   @JoinColumn(name = "USER_ID")
   @JsonIgnore
   Member user;
+
+  @Column(name = "APP_DELETED")
+  private boolean deleted;
 
   public boolean isWriter(User user) {
 

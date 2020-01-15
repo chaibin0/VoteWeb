@@ -65,14 +65,4 @@ public class Candidate {
 
     this.value += value;
   }
-
-  public static Candidate of(Vote vote, CandidateDto candidateDto) {
-
-    return Candidate.builder()
-        .sequenceNumber(candidateDto.getCandidateSeqNo())
-        .name(candidateDto.getCandidateName().trim())
-        .description(candidateDto.getCandidateDesc().trim())
-        .vote(vote)
-        .build();
-  }
 }

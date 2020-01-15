@@ -90,8 +90,8 @@ public class ApplyServiceImpl implements ApplyService {
     if (!apply.isWriter(user)) {
       throw new UnAuthorizedException();
     }
-
-    applyRepository.delete(apply);
+    apply.setDeleted(true);
+    applyRepository.save(apply);
     return ResponseEntity.accepted().build();
   }
 
@@ -141,23 +141,5 @@ public class ApplyServiceImpl implements ApplyService {
     return apply.isHasVote();
   }
 
-  @Override
-  @Transactional
-  public ResponseEntity<?> approvalApply(Long applyId) {
 
-    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
-    apply.setApproval(1);
-    applyRepository.save(apply);
-    return ResponseEntity.accepted().build();
-  }
-
-  @Override
-  public ResponseEntity<?> rejectApply(Long applyId) {
-
-    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
-    apply.setApproval(0);
-    applyRepository.save(apply);
-    return ResponseEntity.accepted().build();
-
-  }
 }

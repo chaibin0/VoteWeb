@@ -109,8 +109,8 @@ public class VoteWebMvcTest {
   @Test
   public void insertTestOnlyOneCandidate() throws Exception {
 
-    given(voteService.saveVoteInfo(Mockito.any(User.class), Mockito.any(VoteInfoDto.class)))
-        .willThrow(MethodArgumentNotValidException.class);
+//    given(voteService.saveVoteInfo(Mockito.any(User.class), Mockito.any(VoteInfoDto.class)))
+//        .willThrow(MethodArgumentNotValidException.class);
 
     mvc.perform(post("/api/v1/vote/making")
         .contentType(MediaType.APPLICATION_JSON)
