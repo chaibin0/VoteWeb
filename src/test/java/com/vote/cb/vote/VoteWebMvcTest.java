@@ -2,6 +2,8 @@ package com.vote.cb.vote;
 
 import static org.hamcrest.CoreMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -181,7 +183,7 @@ public class VoteWebMvcTest {
 
     ObjectMapper mapper = new ObjectMapper();
     MockHttpSession session = new MockHttpSession();
-
+    
     given(voteService.authVoterInfo(Mockito.any(VoteSignDto.class), Mockito.any(HttpSession.class)))
         .willReturn(ResponseEntity.ok().build());
 

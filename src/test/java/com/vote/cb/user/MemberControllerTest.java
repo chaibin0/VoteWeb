@@ -10,7 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vote.cb.user.controller.MemberApiController;
-import com.vote.cb.user.controller.MemberController;
 import com.vote.cb.user.controller.dto.CheckUserIdResponseDto;
 import com.vote.cb.user.controller.dto.SignUpDto;
 import com.vote.cb.user.service.MemberService;
@@ -27,7 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(controllers = {MemberController.class, MemberApiController.class})
+@WebMvcTest(controllers = {MemberApiController.class})
 public class MemberControllerTest {
 
   @Autowired

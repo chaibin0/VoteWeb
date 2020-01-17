@@ -35,8 +35,8 @@
             <tbody>
                 <tr th:each="list : ${applyList}">
                     <td><a th:href="|/apply/${list.id}|">[[${list.title}]]</a></td>
-                    <td>[[${list.start}]]</td>
-                    <td>[[${list.end}]]</td>
+                    <td>[[${#temporals.format(list.start,'yyyy-MM-dd HH:mm')}]]</td>
+                    <td>[[${#temporals.format(list.end,'yyyy-MM-dd HH:mm')}]]</td>
                     <td>
                         <span th:if="${list.approval}==1"><i class="icon checkmark"></i>승인</span>
                         <span th:if="${list.approval}==0"><i class="icon close"></i>거부</span>

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Slf4j
-@RestControllerAdvice(annotations = RestController.class)
+@RestControllerAdvice
 public class RestControllerErrorAdvice {
 
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -27,11 +27,13 @@ public class RestControllerErrorAdvice {
     if (bindingResult != null) {
 
       return ResponseEntity.badRequest()
-          .body(bindingResult.getFieldError().getDefaultMessage());
+          .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request",
+              bindingResult.getFieldError().getDefaultMessage()));
     }
 
     return ResponseEntity.badRequest()
-        .body("invalid Request");
+        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request",
+            "invalid"));
   }
 
   @ExceptionHandler(UnAuthorizedException.class)

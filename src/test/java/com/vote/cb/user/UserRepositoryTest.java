@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
+import com.vote.cb.apply.domain.UserRoleRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.exception.CandidateNotFoundException;
 import com.vote.cb.exception.MemberNotFoundException;
@@ -12,7 +13,8 @@ import com.vote.cb.exception.VoteNotFoundException;
 import com.vote.cb.user.controller.dto.SignUpDto;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
-import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.UserRole;
+import com.vote.cb.user.domain.enums.UserRoleType;
 import com.vote.cb.user.domain.enums.UserStatusType;
 import com.vote.cb.vote.domain.Candidate;
 import com.vote.cb.vote.domain.CandidateRepository;
@@ -55,6 +57,9 @@ class UserRepositoryTest {
   @Autowired
   ApplyRepository applyRepository;
 
+  @Autowired
+  UserRoleRepository userRoleRepository;
+
   @BeforeEach
   void setUp() throws Exception {
 
@@ -77,7 +82,7 @@ class UserRepositoryTest {
     LocalDateTime createdAt = LocalDateTime.now();
     String createdBy = "ADMIN_SERVER";
     UserStatusType status = UserStatusType.NORMAL;
-    UserRole role = UserRole.USER;
+    // UserRoleType role = UserRoleType.USER;
 
     Member user = Member.builder()
         .userId(id)
@@ -87,16 +92,22 @@ class UserRepositoryTest {
         .createdAt(createdAt)
         .createdBy(createdBy)
         .status(status)
-        .role(role)
         .build();
     Member newUser = userRepository.save(user);
+
+    UserRole role = UserRole.builder()
+        .user(newUser)
+        .role(UserRoleType.USER)
+        .build();
+
+    UserRole newRole = userRoleRepository.save(role);
 
     assertThat(newUser.getUserId()).isEqualTo(id);
     assertThat(newUser.getPassword()).isEqualTo(password);
     assertThat(newUser.getName()).isEqualTo(name);
     assertThat(newUser.getPhone()).isEqualTo(phone);
-    assertThat(newUser.getRole()).isEqualTo(role);
     assertThat(newUser.getStatus()).isEqualTo(status);
+    assertThat(newRole.getUser().getUserId()).isEqualTo(id);
   }
 
   @DisplayName("Dto를 이용한 User 유저 생성 테스트")
@@ -112,10 +123,18 @@ class UserRepositoryTest {
         .createdAt(LocalDateTime.now())
         .createdBy("ADMIN_SERVER")
         .status(UserStatusType.NORMAL)
-        .role(UserRole.USER)
         .build();
 
+
+
     Member newUser = userRepository.save(user);
+
+    UserRole role = UserRole.builder()
+        .user(newUser)
+        .role(UserRoleType.USER)
+        .build();
+
+    UserRole newRole = userRoleRepository.save(role);
 
     assertThat(newUser.getUserId()).isEqualTo(user.getUserId());
     assertThat(newUser.getPassword()).isEqualTo(user.getPassword());
@@ -123,6 +142,8 @@ class UserRepositoryTest {
     assertThat(newUser.getPhone()).isEqualTo(user.getPhone());
     assertThat(newUser.getRole()).isEqualTo(user.getRole());
     assertThat(newUser.getStatus()).isEqualTo(user.getStatus());
+    assertThat(newRole.getUser().getUserId()).isEqualTo(user.getUserId());
+
   }
 
   @DisplayName("유저 삭제 테스트")
@@ -138,11 +159,11 @@ class UserRepositoryTest {
         .createdAt(LocalDateTime.now())
         .createdBy("ADMIN_SERVER")
         .status(UserStatusType.NORMAL)
-        .role(UserRole.USER)
         .build();
 
     userRepository.saveAndFlush(user);
     userRepository.deleteById(signUpDto.getId());
+
 
     assertThatThrownBy(() -> {
       userRepository.findById(user.getUserId()).orElseThrow(MemberNotFoundException::new);

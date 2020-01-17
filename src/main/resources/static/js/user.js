@@ -8,26 +8,28 @@ function changeId() {
     div.innerText = '';
 }
 
-function checkSameId() {
+async function checkSameId() {
     let userId = document.getElementById('userId').value;
     let div = document.getElementById('checkResult');
-    fetch(`/api/v1/user/check-id?userId=${userId}`, {
+    let response = fetch(`/api/v1/user/check-id?userId=${userId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then((response) => response.json()).then((response) => {
-        console.log(response);
-        if (!response.checkUserId) {
+    });
+
+
+    if (response && response.ok) {
+        if (!(await response.json()).checkId) {
             checkId = true;
             div.innerText = '아이디 사용가능';
         } else {
             checkId = false;
             div.innerText = '중복된 아이디';
         }
-    }).catch((error) => {
-        console.log(error);
-    });
+    } else {
+        console.log((await response.json()).message);
+    }
 }
 
 async function signup() {
@@ -66,6 +68,6 @@ async function signup() {
         alert('회원가입이 성공하였습니다.');
         window.location.replace('/');
     } else {
-        alert(await response.text());
+        alert((await response.json()).message);
     }
 }

@@ -40,7 +40,7 @@ async function sendVote(voteInfoId) {
             'Content-type': 'application/json'
         },
         body: JSON.stringify(vote)
-    })
+    });
 
 
     if (response && response.ok) {
@@ -77,7 +77,7 @@ async function signinByLink() {
         window.location.replace(`/vote/voting`)
     } else {
         let error = document.getElementById('error');
-        let errorObject = await response.text();
+        let errorObject = (await response.json()).message;
         error.innerText = errorObject;
         error.style.display = 'block';
     }
@@ -131,6 +131,10 @@ function sendForm(applyId) {
     }
 
     let votes = getVotes(applyId);
+
+    if(!votes){
+        return;
+    }
 
     fetch('/api/v1/vote/making', {
         method: 'POST',

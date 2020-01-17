@@ -29,10 +29,10 @@
             </thead>
             <tbody>
                 <tr th:each="list : ${applyList}">
-                    <td>[[${list.createdAt}]]</td>
+                    <td>[[${#temporals.format(list.createdAt,'yyyy-MM-dd HH:mm')}]]</td>
                     <td>[[${list.title}]]</td>
-                    <td>[[${list.start}]]</td>
-                    <td>[[${list.end}]]</td>
+                    <td>[[${#temporals.format(list.start,'yyyy-MM-dd HH:mm')}]]</td>
+                    <td>[[${#temporals.format(list.end,'yyyy-MM-dd HH:mm')}]]</td>
                     <td>[[${list.name}]]</td>
                     <td th:if="${list.approval} == -1 or ${list.approval} == 0">
                         <button type="submit" th:onclick="|approvalApplication(${list.id})|">승인</button>

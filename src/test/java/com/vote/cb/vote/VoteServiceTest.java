@@ -12,7 +12,7 @@ import com.vote.cb.apply.domain.VoterRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.apply.domain.enums.VoterStatusType;
 import com.vote.cb.user.domain.Member;
-import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.enums.UserRoleType;
 import com.vote.cb.user.domain.enums.UserStatusType;
 import com.vote.cb.vote.controller.dto.VoteInfoDto;
 import com.vote.cb.vote.controller.dto.VoteSignDto;
@@ -107,7 +107,6 @@ class VoteServiceTest {
         .createdAt(LocalDateTime.now())
         .createdBy("TEST_SERVER")
         .status(UserStatusType.NORMAL)
-        .role(UserRole.USER)
         .build();
 
     apply = Apply.builder()

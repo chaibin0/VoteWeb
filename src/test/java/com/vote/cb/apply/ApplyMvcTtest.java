@@ -72,7 +72,7 @@ class ApplyMvcTtest {
 
     given(applyService.removeApply(Mockito.any(User.class), Mockito.anyLong()))
         .willReturn(ResponseEntity.accepted().build());
-    
+
     mvc.perform(delete("/api/v1/apply/1"))
         .andExpect(status().isAccepted())
         .andDo(print());

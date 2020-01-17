@@ -98,7 +98,7 @@ async function applySubmit() {
     if (response && response.ok) {
         window.location.replace('/apply');
     } else {
-        alert(await response.text());
+        alert((await response.json()).message);
     }
 
 }
@@ -181,7 +181,7 @@ function cancleModify() {
 
 async function modifyApply(id) {
 
-    if(!confirm('수정할 시 관리자로부터 재 인증이 필요합니다. 수정하시겠습니까?')){
+    if (!confirm('수정할 시 관리자로부터 재 인증이 필요합니다. 수정하시겠습니까?')) {
         return;
     }
 
@@ -248,7 +248,7 @@ async function modifyApply(id) {
         alert("성공");
         window.location.reload();
     } else {
-        console.log(await response.text());
+        console.log((await response.json()).message);
         alert('에러@@');
         window.location.reload();
     }
@@ -267,7 +267,7 @@ async function removeApply(id) {
         alert("삭제가 성공되었습니다");
         window.location.replace('/apply');
     } else {
-        console.log(error);
+        console.log((await response.json()).message);
         alert('에러@@');
     }
 }
@@ -285,6 +285,6 @@ async function counting(id) {
         alert("개표 끝");
         window.location.reload();
     } else {
-        alert(await response.text())
+        alert((await response.json()).message);
     }
 }

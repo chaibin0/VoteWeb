@@ -2,18 +2,21 @@ package com.vote.cb.user.service;
 
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
+import com.vote.cb.apply.domain.UserRoleRepository;
 import com.vote.cb.exception.MemberNotFoundException;
 import com.vote.cb.user.controller.dto.CheckUserIdResponseDto;
 import com.vote.cb.user.controller.dto.MemberResponseDto;
 import com.vote.cb.user.controller.dto.SignUpDto;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
-import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.UserRole;
+import com.vote.cb.user.domain.enums.UserRoleType;
 import com.vote.cb.user.domain.enums.UserStatusType;
 
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,12 +35,15 @@ public class MemberServiceImpl implements MemberService {
 
   private PasswordEncoder passwordEncoder;
 
+  private UserRoleRepository userRoleRepository;
+
   public MemberServiceImpl(ApplyRepository applyRepository, MemberRepository userRepository,
-      PasswordEncoder passwordEncoder) {
+      PasswordEncoder passwordEncoder, UserRoleRepository userRoleRepository) {
 
     this.applyRepository = applyRepository;
     this.userRepository = userRepository;
     this.passwordEncoder = passwordEncoder;
+    this.userRoleRepository = userRoleRepository;
   }
 
   @Override
@@ -56,6 +62,7 @@ public class MemberServiceImpl implements MemberService {
   }
 
   @Override
+  @Transactional
   public ResponseEntity<?> signUpUser(SignUpDto dto) {
 
     if (userRepository.existsById(dto.getId())) {
@@ -63,6 +70,14 @@ public class MemberServiceImpl implements MemberService {
     }
 
     Member newUser = userRepository.save(dto.toMember(passwordEncoder));
+
+    UserRole userRole = UserRole.builder()
+        .user(newUser)
+        .role(UserRoleType.USER)
+        .build();
+
+    userRoleRepository.save(userRole);
+
     return ResponseEntity.created(null).body(newUser);
   }
 

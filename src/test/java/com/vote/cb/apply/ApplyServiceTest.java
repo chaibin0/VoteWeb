@@ -15,7 +15,7 @@ import com.vote.cb.apply.service.ApplyService;
 import com.vote.cb.apply.service.ApplyServiceImpl;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
-import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.enums.UserRoleType;
 import com.vote.cb.user.domain.enums.UserStatusType;
 
 import java.time.LocalDateTime;
@@ -97,7 +97,6 @@ class ApplyServiceTest {
         .createdAt(LocalDateTime.now())
         .createdBy("TEST_SERVER")
         .status(UserStatusType.NORMAL)
-        .role(UserRole.USER)
         .build();
   }
 

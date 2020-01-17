@@ -8,6 +8,7 @@ import com.vote.cb.apply.domain.enums.VoterStatusType;
 import com.vote.cb.exception.AlreadyRegiststeredException;
 import com.vote.cb.exception.ApplyNotFoundException;
 import com.vote.cb.exception.CandidateNotFoundException;
+import com.vote.cb.exception.ExceptionDetails;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.exception.VoteInfoNotFoundException;
 import com.vote.cb.exception.VoteNotFoundException;
@@ -38,6 +39,7 @@ import javax.validation.Valid;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -181,28 +183,31 @@ public class VoteServiceImpl implements VoteService {
 
     Voter voter = voterRepository.findByNameAndPhoneAndSsn(name, phone, uid)
         .orElseThrow(VoterNotFoundException::new);
+
     VoteInfomation voteInfo = voteInfoRepository.findByApply(voter.getApply())
         .orElseThrow(VoteInfoNotFoundException::new);
-
 
     for (VotingDto votingDto : votingDtoList) {
 
       if (voteInfo.getId() != votingDto.getVoteInfoId()) {
-        return ResponseEntity.badRequest().body("잘못된 요청입니다");
+        return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+            "bad request", "잘못된 요청입니다."));
       }
 
       Vote vote =
           voteRepository.findById(votingDto.getVoteId()).orElseThrow(VoteNotFoundException::new);
 
       if (vote.getVoteInfo().getId() != voteInfo.getId()) {
-        return ResponseEntity.badRequest().body("잘못된 요청입니다");
+        return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+            "bad request", "잘못된 요청입니다."));
       }
 
       Candidate candidate = candidateRepository.findById(votingDto.getCandidateId())
           .orElseThrow(CandidateNotFoundException::new);
 
       if (candidate.getVote().getId() != vote.getId()) {
-        return ResponseEntity.badRequest().body("잘못된 요청입니다");
+        return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+            "bad request", "잘못된 요청입니다."));
       }
       resultRepository.save(Result.of(voter, candidate, votingDto.getValue()));
     }
@@ -232,7 +237,6 @@ public class VoteServiceImpl implements VoteService {
     return VoteResponseDto.of(applyId, voteInfo);
   }
 
-  // 수정할것
   @Override
   @Transactional
   public ResponseEntity<?> modifyVoteInfo(User user, @Valid VoteInfoDto dto) {

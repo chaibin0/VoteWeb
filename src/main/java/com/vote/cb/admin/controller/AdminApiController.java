@@ -2,7 +2,6 @@ package com.vote.cb.admin.controller;
 
 import com.vote.cb.admin.service.AdminService;
 import com.vote.cb.apply.controller.dto.ApprovalDto;
-import com.vote.cb.apply.service.ApplyService;
 import com.vote.cb.user.domain.Member;
 
 import javax.validation.Valid;

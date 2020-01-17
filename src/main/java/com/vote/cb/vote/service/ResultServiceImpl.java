@@ -8,6 +8,7 @@ import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.apply.domain.enums.VoterStatusType;
 import com.vote.cb.exception.ApplyNotFoundException;
 import com.vote.cb.exception.CandidateNotFoundException;
+import com.vote.cb.exception.ExceptionDetails;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.exception.VoteInfoNotFoundException;
 import com.vote.cb.vote.domain.Candidate;
@@ -69,14 +70,16 @@ public class ResultServiceImpl implements ResultService {
     }
 
     if (apply.getEnd().isAfter(LocalDateTime.now())) {
-      return ResponseEntity.badRequest().body("개표할 수 있는 기간이 아닙니다.");
+      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+          "bad request", "개표할 수 있는 기간이 아닙니다."));
     }
 
     VoteInfomation voteInfo =
         voteInfoRepository.findByApply(apply).orElseThrow(VoteInfoNotFoundException::new);
 
     if (voteInfo.getCurrent() <= 0) {
-      return ResponseEntity.badRequest().body("투표자가 없어서 개표할 수 없습니다.");
+      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+          "bad request", "투표자가 존재하지 않아 개표를 실패하였습니다."));
     }
 
     List<Voter> voterList = voterRepository.findAllByApply(apply);

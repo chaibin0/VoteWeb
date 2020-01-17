@@ -30,7 +30,7 @@ public class HttpSessionConfig {
     redisServer = new RedisServer(redisPort);
     redisServer.start();
   }
-
+  
   @PreDestroy
   public void stopRedis() {
 

@@ -104,8 +104,8 @@
                 </tr>
                 <tr>
                     <td>시작 날짜</td>
-                    <td>
-                        <div class="content">[[${apply.start}]]</div>
+                    <td>                  
+                        <div class="content">[[${#temporals.format(apply.start,'yyyy-MM-dd HH:mm')}]]</div>
                         <div class="content-form">
 
                             <div class="ui labeled input">
@@ -126,7 +126,7 @@
                 <tr>
                     <td>종료 날짜</td>
                     <td>
-                        <div class="content">[[${apply.end}]]</div>
+                        <div class="content">[[${#temporals.format(apply.end,'yyyy-MM-dd HH:mm')}]]</div>
                         <div class="content-form">
                             <div class="ui labeled input">
                                 <input type="number" name="endYear" id="endYear">

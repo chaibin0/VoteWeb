@@ -36,7 +36,7 @@ public class VoteSchedule {
 
   @Scheduled(cron = "0 0/5 * * * ?")
   public void voteEndExecute() {
-
+    
     log.info("shedule End");
     List<Apply> applyList =
         applyRepository.findAllByStatusEqualsAndEndLessThan(ApplyStatusType.VOTING,

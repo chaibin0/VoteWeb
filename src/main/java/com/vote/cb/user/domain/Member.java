@@ -1,21 +1,27 @@
 package com.vote.cb.user.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.vote.cb.user.domain.enums.UserRole;
 import com.vote.cb.user.domain.enums.UserStatusType;
+
 import java.time.LocalDateTime;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -69,11 +75,11 @@ public class Member {
   String updatedBy;
 
   @Column(name = "USER_STATUS")
-  @Enumerated(EnumType.STRING) // it will be converted into integer
+  @Enumerated(EnumType.STRING)
   UserStatusType status;
 
   @Column(name = "USER_ROLE")
-  @Enumerated(EnumType.STRING) // it will be converted into integer
   @JsonIgnore
-  UserRole role;
+  @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+  List<UserRole> role;
 }

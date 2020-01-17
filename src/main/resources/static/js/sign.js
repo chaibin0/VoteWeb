@@ -18,11 +18,11 @@ async function signVoterInfo() {
             phone
         })
     });
-    
-    if(response && response.ok){
+
+    if (response && response.ok) {
         window.location.replace("/apply/list");
-    }else{
-        console.log(error);
+    } else {
+        console.log((await response.json()).message);
     }
 }
 
@@ -39,7 +39,7 @@ async function checkSameId() {
         }
     });
 
-    if(response && response.ok){
+    if (response && response.ok) {
         if (!response.checkUserId) {
             checkId = true;
             div.innerText = '아이디 사용가능';
@@ -47,8 +47,8 @@ async function checkSameId() {
             checkId = false;
             div.innerText = '중복된 아이디';
         }
-    }else{
-        console.log(error);
+    } else {
+        console.log((await response.json()).message);
     }
 }
 
@@ -85,5 +85,7 @@ async function signup() {
     if (response && response.ok) {
         alert('회원가입이 성공하였습니다.');
         window.location.replace('/');
+    } else {
+        alert((await response.json()).message);
     }
 }

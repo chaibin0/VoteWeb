@@ -9,8 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.vote.cb.admin.controller.AdminApiController;
 import com.vote.cb.admin.service.AdminService;
-import com.vote.cb.apply.service.ApplyService;
-import com.vote.cb.user.service.MemberService;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = AdminApiController.class)
@@ -31,13 +30,8 @@ class AdminMvcTest {
   @MockBean
   AdminService adminService;
 
-  @MockBean
-  ApplyService applyService;
-
-  @MockBean
-  MemberService userSerivce;
-
   @DisplayName("신청서 거부 Controller Test")
+  @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
   @Test
   public void rejectTest() throws Exception {
 
@@ -52,6 +46,7 @@ class AdminMvcTest {
   }
 
   @DisplayName("신청서 승인 Controller Test")
+  @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
   @Test
   public void approvalTest() throws Exception {
 
@@ -65,18 +60,17 @@ class AdminMvcTest {
   }
 
   @DisplayName("유저 삭제 관리자용 Controller Test")
+  @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
   @Test
   public void removeUser() throws Exception {
 
     String id = "test";
     doReturn(ResponseEntity.accepted().build()).when(adminService).removeUser(Mockito.eq(id));
 
-    mvc.perform(delete("/api/v1/admin/users/remove")
+    mvc.perform(delete("/api/v1/admin/user/remove")
         .param("id", "test"))
         .andExpect(status().isAccepted())
         .andDo(print());
-
-
   }
 
 

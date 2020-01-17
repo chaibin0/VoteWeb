@@ -4,24 +4,22 @@ import com.vote.cb.apply.controller.dto.ApplyRequestDto;
 import com.vote.cb.apply.controller.dto.ApplyResponseDto;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
+import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.exception.ApplyNotFoundException;
+import com.vote.cb.exception.ExceptionDetails;
 import com.vote.cb.exception.MemberNotFoundException;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 public class ApplyServiceImpl implements ApplyService {
@@ -90,7 +88,10 @@ public class ApplyServiceImpl implements ApplyService {
     if (!apply.isWriter(user)) {
       throw new UnAuthorizedException();
     }
+
     apply.setDeleted(true);
+    apply.setStatus(ApplyStatusType.DELETED);
+
     applyRepository.save(apply);
     return ResponseEntity.accepted().build();
   }
@@ -105,7 +106,8 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     if (apply.isVoted()) {
-      return ResponseEntity.badRequest().body("투표가 시작되었으면 수정할 수 없습니다.");
+      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+          "bad request", "투표 중이거나 끝난것에 대해서는  추가할 수 없습니다."));
     }
 
     apply.modify(dto);

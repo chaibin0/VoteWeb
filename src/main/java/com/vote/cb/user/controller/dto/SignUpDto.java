@@ -1,7 +1,7 @@
 package com.vote.cb.user.controller.dto;
 
 import com.vote.cb.user.domain.Member;
-import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.enums.UserRoleType;
 import com.vote.cb.user.domain.enums.UserStatusType;
 
 import javax.validation.constraints.Email;
@@ -39,7 +39,8 @@ public class SignUpDto {
   @NotBlank(message = "이메일을 입력해주세요")
   @Email(message = "이메일양식에 맞춰 입력하세요")
   String email;
-
+  
+  
   public Member toMember(PasswordEncoder passwordEncoder) {
 
     return Member.builder()
@@ -49,7 +50,7 @@ public class SignUpDto {
         .email(email)
         .phone(phone)
         .status(UserStatusType.NORMAL)
-        .role(UserRole.USER).build();
+        .build();
   }
 
 

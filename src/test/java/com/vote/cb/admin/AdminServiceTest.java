@@ -12,7 +12,7 @@ import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
-import com.vote.cb.user.domain.enums.UserRole;
+import com.vote.cb.user.domain.enums.UserRoleType;
 import com.vote.cb.user.domain.enums.UserStatusType;
 
 import java.time.LocalDateTime;
@@ -76,7 +76,6 @@ class AdminServiceTest {
         .createdAt(LocalDateTime.now())
         .createdBy("TEST_SERVER")
         .status(UserStatusType.NORMAL)
-        .role(UserRole.USER)
         .build();
 
   }

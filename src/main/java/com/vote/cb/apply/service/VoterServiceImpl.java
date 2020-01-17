@@ -6,11 +6,11 @@ import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.Voter;
 import com.vote.cb.apply.domain.VoterRepository;
 import com.vote.cb.exception.ApplyNotFoundException;
+import com.vote.cb.exception.ExceptionDetails;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.exception.VoterNotFoundException;
 
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import java.time.LocalDateTime;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -55,7 +55,8 @@ public class VoterServiceImpl implements VoterService {
     }
 
     if (apply.isVoted()) {
-      return ResponseEntity.badRequest().body("투표 중이거나 끝난것에 대해서는  추가할 수 없습니다.");
+      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+          "bad request", "투표 중이거나 끝난것에 대해서는  추가할 수 없습니다."));
     }
 
     voterRepository.save(dto.toVoter(apply));
@@ -74,7 +75,8 @@ public class VoterServiceImpl implements VoterService {
     }
 
     if (voter.getApply().isVoted()) {
-      return ResponseEntity.badRequest().body("투표 중이거나 끝난것에 대해서는 수정할 수 없습니다.");
+      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+          "bad request", "투표 중이거나 끝난것에 대해서는  추가할 수 없습니다."));
     }
 
     voterRepository.save(dto.modifyByDto(voter));
@@ -92,7 +94,8 @@ public class VoterServiceImpl implements VoterService {
     }
 
     if (voter.getApply().isVoted()) {
-      return ResponseEntity.badRequest().body("투표 중이거나 끝난것에 대해서는 수정할 수 없습니다.");
+      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
+          "bad request", "투표 중이거나 끝난것에 대해서는  추가할 수 없습니다."));
     }
 
     voterRepository.delete(voter);

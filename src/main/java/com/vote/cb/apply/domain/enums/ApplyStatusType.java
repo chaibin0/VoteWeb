@@ -7,7 +7,8 @@ public enum ApplyStatusType {
   APRROVAL("승인"),
   VOTING("투표중"),
   FINISHED("종료"),
-  COUNTED("개표");
+  COUNTED("개표"),
+  DELETED("삭제");
 
   private String status;
 

@@ -2,9 +2,11 @@ package com.vote.cb.user.service;
 
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
+import com.vote.cb.user.domain.UserRole;
+
 import java.util.HashSet;
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -27,18 +29,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
     Member member =
-        userRepository.findById(username).orElseThrow(() -> new UsernameNotFoundException(""));
+        userRepository.findById(username)
+            .orElseThrow(() -> new UsernameNotFoundException("아이디를 찾을 수 없습니다 : " + username));
 
     Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
-    grantedAuthorities.add(new SimpleGrantedAuthority("ROLE_" + member.getRole().toString()));
+    for (UserRole role : member.getRole()) {
+      grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole().getRoleName()));
+    }
 
     return User.builder()
         .username(member.getUserId())
         .password(member.getPassword())
         .authorities(grantedAuthorities).build();
-
-
   }
 
 }
