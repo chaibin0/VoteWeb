@@ -34,4 +34,5 @@ function rejectApplication(id) {
     }).catch((error) => {
         alert('에러');
     });
+    
 }

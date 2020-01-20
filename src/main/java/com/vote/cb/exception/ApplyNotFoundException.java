@@ -1,7 +1,7 @@
 package com.vote.cb.exception;
 
 
-public class ApplyNotFoundException extends RuntimeException {
+public class ApplyNotFoundException extends CustomException {
 
   private static final long serialVersionUID = 1927089834740782209L;
 

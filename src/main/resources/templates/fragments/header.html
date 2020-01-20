@@ -5,6 +5,8 @@
             <a class="item" href="/apply/making">Apply</a>
             <a class="item" href="/apply">Make</a>
             <a sec:authorize="hasRole('ADMIN')" class="item" href="/admin">admin</a>
+            <a sec:authorize="hasRole('USER')" class="item" href="/mypage">mypage</a>
+
             <div class="right item">
                 <div sec:authorize="!isAuthenticated()">
                     <a class="ui inverted button" href="/user/login">Log in</a>

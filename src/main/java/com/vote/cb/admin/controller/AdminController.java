@@ -1,24 +1,32 @@
 package com.vote.cb.admin.controller;
 
+import com.vote.cb.admin.service.AdminService;
+import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.apply.service.ApplyService;
+import com.vote.cb.user.domain.enums.UserStatusType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
-  @Autowired
+
   private ApplyService applyService;
 
-  public AdminController(ApplyService applyService) {
+  private AdminService adminService;
+
+  @Autowired
+  public AdminController(ApplyService applyService, AdminService adminService) {
 
     this.applyService = applyService;
+    this.adminService = adminService;
   }
 
   @GetMapping("")
@@ -26,6 +34,16 @@ public class AdminController {
 
     ModelAndView model = new ModelAndView();
     model.addObject("applyList", applyService.getApplyAllList(pageable));
+    model.setViewName("admin/adminMain");
+    return model;
+  }
+
+  @GetMapping("/user")
+  public ModelAndView viewUser(Pageable pageable, @RequestParam String search,
+      @RequestParam UserStatusType type) {
+
+    ModelAndView model = new ModelAndView();
+    model.addObject("userList", adminService.getUserList(pageable, search, type));
     model.setViewName("admin/adminMain");
     return model;
   }

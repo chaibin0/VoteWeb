@@ -3,7 +3,7 @@ package com.vote.cb.exception;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AlreadyRegiststeredException extends RuntimeException {
+public class AlreadyRegiststeredException extends CustomException {
 
   private static final long serialVersionUID = -5989570373875648530L;
 

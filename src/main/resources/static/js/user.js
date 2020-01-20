@@ -11,7 +11,7 @@ function changeId() {
 async function checkSameId() {
     let userId = document.getElementById('userId').value;
     let div = document.getElementById('checkResult');
-    let response = fetch(`/api/v1/user/check-id?userId=${userId}`, {
+    let response = await fetch(`/api/v1/user/check-id?userId=${userId}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -20,12 +20,14 @@ async function checkSameId() {
 
 
     if (response && response.ok) {
-        if (!(await response.json()).checkId) {
+        if (!(await response.json()).checkUserId) {
             checkId = true;
             div.innerText = '아이디 사용가능';
+            return;
         } else {
             checkId = false;
             div.innerText = '중복된 아이디';
+            return;
         }
     } else {
         console.log((await response.json()).message);
@@ -69,5 +71,83 @@ async function signup() {
         window.location.replace('/');
     } else {
         alert((await response.json()).message);
+    }
+}
+
+async function modifyUser() {
+
+    let name = document.getElementById('name').value;
+    let phone = document.getElementById('phone').value;
+    let email = document.getElementById('email').value;
+
+    let response = await fetch('/api/v1/user/info', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            name,
+            email,
+            phone
+        })
+    });
+
+    if (response && response.ok) {
+        alert('수정완료');
+        window.location.replace('/mypage');
+    } else {
+        alert((await response.json()).message);
+    }
+}
+
+async function modifyPassword() {
+    let password = document.getElementById('password').value;
+    let newPassword = document.getElementById('newPassword').value;
+    let newPasswordCheck = document.getElementById('newPasswordCheck').value;
+
+    if (newPassword !== newPasswordCheck) {
+        alert('비밀번호가 동일하지 않습니다.');
+        return;
+    }
+
+    let response = await fetch('/api/v1/user/password', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            password,
+            newPassword,
+            newPasswordCheck
+        })
+    });
+
+    if (response && response.ok) {
+        alert('수정완료');
+        window.location.replace('/mypage');
+    } else {
+        alert((await response.json()).message);
+    }
+
+}
+
+async function removeUser() {
+    if (!confirm("삭제하시겠습니까?")) {
+        return;
+    }
+    if (!confirm("진짜 삭제하시겠습니까?")) {
+        return;
+    }
+
+    let response = await fetch('/api/v1/user', {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (response && response.ok) {
+        alert('잘가요');
+        location.href = "/user/logout";
     }
 }

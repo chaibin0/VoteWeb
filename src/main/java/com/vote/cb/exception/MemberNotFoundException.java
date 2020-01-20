@@ -1,7 +1,7 @@
 package com.vote.cb.exception;
 
 
-public class MemberNotFoundException extends RuntimeException {
+public class MemberNotFoundException extends CustomException {
 
   private static final long serialVersionUID = 163374328415726755L;
 

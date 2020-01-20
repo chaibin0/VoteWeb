@@ -1,15 +1,21 @@
-<header>
-    <div class="header-title">
-        <img class="header-image" src="image/title.jpg" alt="이미지">
+<div class="ui inverted vertical masthead center aligned segment">
+    <div class="ui container">
+        <div class="ui large secondary inverted pointing menu">
+            <a class="item" href="/admin">투표신청관리</a>
+            <a class="item" href="/admin/application">Apply</a>
+            <a class="item" href="/admin/user">회원관리</a>
+
+            <div class="right item">
+                <div sec:authorize="!isAuthenticated()">
+                    <a class="ui inverted button" href="/user/login">Log in</a>
+                </div>
+                <div sec:authorize="!isAuthenticated()">
+                    <a class="ui inverted button" href="/user/signup">Sign Up</a>
+                </div>
+                <div sec:authorize="isAuthenticated()">
+                    <a class="ui inverted button" href="/user/logout">Log out</a>
+                </div>
+            </div>
+        </div>
     </div>
-    <nav class="header-menubar">
-        <ul>
-            <li class="menu"><a href="/admin/user">회원관리</a></li>
-            <li class="menu"><a href="/admin/application">투표신청관리</a></li>
-            <li class="menu"><a href="/admin/vote">투표상황관리</a></li>
-        </ul>
-    </nav>
-    <div class="header-login">
-        <img class="header-login-image" alt="로그인">
-    </div>
-</header>
+</div>

@@ -1,7 +1,7 @@
 package com.vote.cb.exception;
 
 
-public class UnAuthorizedException extends RuntimeException {
+public class UnAuthorizedException extends CustomException {
 
   private static final long serialVersionUID = -1122451889527063996L;
 

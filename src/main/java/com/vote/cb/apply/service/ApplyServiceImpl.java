@@ -6,6 +6,7 @@ import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.exception.ApplyNotFoundException;
+import com.vote.cb.exception.CustomException;
 import com.vote.cb.exception.ExceptionDetails;
 import com.vote.cb.exception.MemberNotFoundException;
 import com.vote.cb.exception.UnAuthorizedException;
@@ -17,6 +18,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -38,7 +40,8 @@ public class ApplyServiceImpl implements ApplyService {
   public Page<Apply> getApplyAllList(Pageable pageable, User user) {
 
     Member member =
-        memberRepository.findById(user.getUsername()).orElseThrow(MemberNotFoundException::new);
+        memberRepository.findById(user.getUsername())
+            .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
 
     return applyRepository.findAllByUser(pageable, member);
   }
@@ -52,10 +55,11 @@ public class ApplyServiceImpl implements ApplyService {
   @Override
   public ApplyResponseDto getApply(User user, Long applyId) {
 
-    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+    Apply apply =
+        applyRepository.findById(applyId).orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
     return ApplyResponseDto.of(apply);
   }
@@ -64,7 +68,8 @@ public class ApplyServiceImpl implements ApplyService {
   public ResponseEntity<?> registerApply(User user, ApplyRequestDto dto) {
 
     Member member =
-        memberRepository.findById(user.getUsername()).orElseThrow(MemberNotFoundException::new);
+        memberRepository.findById(user.getUsername())
+            .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
 
     Apply apply = dto.toApply(member);
 
@@ -75,7 +80,8 @@ public class ApplyServiceImpl implements ApplyService {
   public List<Apply> getApplyList(User user) {
 
     Member member =
-        memberRepository.findById(user.getUsername()).orElseThrow(MemberNotFoundException::new);
+        memberRepository.findById(user.getUsername())
+            .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
     List<Apply> applies = applyRepository.findAllByUser(member);
     return applies;
   }
@@ -83,10 +89,11 @@ public class ApplyServiceImpl implements ApplyService {
   @Override
   public ResponseEntity<?> removeApply(User user, Long applyId) {
 
-    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+    Apply apply =
+        applyRepository.findById(applyId).orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
 
     apply.setDeleted(true);
@@ -99,15 +106,17 @@ public class ApplyServiceImpl implements ApplyService {
   @Override
   public ResponseEntity<?> modifyApply(User user, ApplyRequestDto dto) {
 
-    Apply apply = applyRepository.findById(dto.getId()).orElseThrow(ApplyNotFoundException::new);
+    Apply apply =
+        applyRepository.findById(dto.getId()).orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
 
     if (apply.isVoted()) {
-      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
-          "bad request", "투표 중이거나 끝난것에 대해서는  추가할 수 없습니다."));
+      return ResponseEntity.badRequest()
+          .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST.getReasonPhrase(), "투표 중이거나 끝난것에 대해서는  추가할 수 없습니다."));
     }
 
     apply.modify(dto);
@@ -118,10 +127,11 @@ public class ApplyServiceImpl implements ApplyService {
   @Override
   public boolean alreadyStart(User user, Long applyId) {
 
-    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+    Apply apply =
+        applyRepository.findById(applyId).orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
 
     if (apply.isVoted()) {
@@ -134,10 +144,11 @@ public class ApplyServiceImpl implements ApplyService {
   @Override
   public boolean hasVote(User user, Long applyId) {
 
-    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+    Apply apply =
+        applyRepository.findById(applyId).orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
 
     return apply.isHasVote();

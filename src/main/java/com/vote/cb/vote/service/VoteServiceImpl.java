@@ -8,6 +8,7 @@ import com.vote.cb.apply.domain.enums.VoterStatusType;
 import com.vote.cb.exception.AlreadyRegiststeredException;
 import com.vote.cb.exception.ApplyNotFoundException;
 import com.vote.cb.exception.CandidateNotFoundException;
+import com.vote.cb.exception.CustomException;
 import com.vote.cb.exception.ExceptionDetails;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.exception.VoteInfoNotFoundException;
@@ -80,14 +81,15 @@ public class VoteServiceImpl implements VoteService {
 
     // 신청서와 현재 session 정보가 같아야만 등록이 가능하게 해야함
     Apply apply =
-        applyRepository.findById(voteInfoDto.getApplyId()).orElseThrow(ApplyNotFoundException::new);
+        applyRepository.findById(voteInfoDto.getApplyId())
+            .orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
 
     if (apply.isHasVote()) {
-      throw new AlreadyRegiststeredException();
+      throw CustomException.ALREADY_REGISTERED;
     }
 
     VoteInfomation saveVoteInfo = voteInfoRepository.save(voteInfoDto.toVoteInfomation(apply));
@@ -136,20 +138,30 @@ public class VoteServiceImpl implements VoteService {
 
     Voter voter =
         voterRepository.findByNameAndPhoneAndSsn(dto.getName(), dto.getPhone(), dto.getUid())
-            .orElseThrow(VoterNotFoundException::new);
+            .orElseThrow(() -> CustomException.VOTER_NOT_FOUND);
 
     if (voter == null) {
-      return ResponseEntity.badRequest().body("투표정보가 정확하지 않습니다.");
+      return ResponseEntity.badRequest()
+          .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST.getReasonPhrase(), "투표정보가 정확하지 않습니다."));
     }
 
+
     if (voter.getApply().getEnd().isBefore(LocalDateTime.now())) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("투표가 끝났습니다.");
+      return ResponseEntity.badRequest()
+          .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST.getReasonPhrase(), "투표가 끝났습니다."));
     }
+
     if (voter.getApply().getStart().isAfter(LocalDateTime.now())) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("투표시작 전입니다.");
+      return ResponseEntity.badRequest()
+          .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST.getReasonPhrase(), "투표시작 전입니다."));
     }
     if (voter.getStatus().equals(VoterStatusType.VOTED)) {
-      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("이미 투표하셨습니다.");
+      return ResponseEntity.badRequest()
+          .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST.getReasonPhrase(), "이미 투표하셨습니다."));
     }
 
     session.setAttribute("name", voter.getName());
@@ -190,24 +202,27 @@ public class VoteServiceImpl implements VoteService {
     for (VotingDto votingDto : votingDtoList) {
 
       if (voteInfo.getId() != votingDto.getVoteInfoId()) {
-        return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
-            "bad request", "잘못된 요청입니다."));
+        return ResponseEntity.badRequest()
+            .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(), "잘못된 요청입니다."));
       }
 
       Vote vote =
           voteRepository.findById(votingDto.getVoteId()).orElseThrow(VoteNotFoundException::new);
 
       if (vote.getVoteInfo().getId() != voteInfo.getId()) {
-        return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
-            "bad request", "잘못된 요청입니다."));
+        return ResponseEntity.badRequest()
+            .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(), "잘못된 요청입니다."));
       }
 
       Candidate candidate = candidateRepository.findById(votingDto.getCandidateId())
           .orElseThrow(CandidateNotFoundException::new);
 
       if (candidate.getVote().getId() != vote.getId()) {
-        return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
-            "bad request", "잘못된 요청입니다."));
+        return ResponseEntity.badRequest()
+            .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.BAD_REQUEST.getReasonPhrase(), "잘못된 요청입니다."));
       }
       resultRepository.save(Result.of(voter, candidate, votingDto.getValue()));
     }
@@ -226,14 +241,15 @@ public class VoteServiceImpl implements VoteService {
   @Transactional
   public VoteResponseDto getVoteListByApplyId(User user, Long applyId) {
 
-    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+    Apply apply =
+        applyRepository.findById(applyId).orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
 
     VoteInfomation voteInfo =
-        voteInfoRepository.findByApply(apply).orElseThrow(VoteInfoNotFoundException::new);
+        voteInfoRepository.findByApply(apply).orElseThrow(() -> CustomException.VOTEINFO_NOT_FOUND);
     return VoteResponseDto.of(applyId, voteInfo);
   }
 
@@ -242,14 +258,15 @@ public class VoteServiceImpl implements VoteService {
   public ResponseEntity<?> modifyVoteInfo(User user, @Valid VoteInfoDto dto) {
 
     Apply apply =
-        applyRepository.findById(dto.getApplyId()).orElseThrow(ApplyNotFoundException::new);
+        applyRepository.findById(dto.getApplyId())
+            .orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
 
     VoteInfomation voteInfo =
-        voteInfoRepository.findByApply(apply).orElseThrow(VoteInfoNotFoundException::new);
+        voteInfoRepository.findByApply(apply).orElseThrow(() -> CustomException.VOTEINFO_NOT_FOUND);
 
     voteInfo.setDescription(dto.getVoteInfoDesc())
         .setName(dto.getVoteInfoTitle());

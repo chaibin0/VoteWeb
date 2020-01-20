@@ -21,18 +21,20 @@ public class RestControllerErrorAdvice {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> badRequest(MethodArgumentNotValidException e) {
 
-    log.info(e.getMessage(), e);
+    log.info(e.getMessage());
 
     BindingResult bindingResult = e.getBindingResult();
     if (bindingResult != null) {
 
       return ResponseEntity.badRequest()
-          .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request",
+          .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST.getReasonPhrase(),
               bindingResult.getFieldError().getDefaultMessage()));
     }
 
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request",
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(),
             "invalid"));
   }
 
@@ -40,40 +42,44 @@ public class RestControllerErrorAdvice {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> unAuthroized(UnAuthorizedException e) {
 
-    log.info(e.getMessage(), e);
+    log.info(e.getMessage());
 
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "401", "bad request", e.getMessage()));
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
   }
 
   @ExceptionHandler(ApplyNotFoundException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundApply(ApplyNotFoundException e) {
 
-    log.info(e.getMessage(), e);
+    log.info(e.getMessage());
 
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
   }
 
   @ExceptionHandler(MemberNotFoundException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundMember(MemberNotFoundException e) {
 
-    log.info(e.getMessage(), e);
+    log.info(e.getMessage());
 
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
   }
 
   @ExceptionHandler(CandidateNotFoundException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundCandidate(CandidateNotFoundException e) {
 
-    log.info(e.getMessage(), e);
+    log.info(e.getMessage());
 
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
   }
 
   @ExceptionHandler(VoterNotFoundException.class)
@@ -83,7 +89,8 @@ public class RestControllerErrorAdvice {
     log.info(e.getMessage());
 
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
   }
 
 
@@ -91,10 +98,11 @@ public class RestControllerErrorAdvice {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> notFoundVoteInfo(VoteInfoNotFoundException e) {
 
-    log.info(e.getMessage(), e);
+    log.info(e.getMessage());
 
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
   }
 
 
@@ -106,7 +114,8 @@ public class RestControllerErrorAdvice {
     log.info(e.getMessage(), e);
 
     return ResponseEntity.badRequest()
-        .body(new ExceptionDetails(LocalDateTime.now(), "400", "bad request", e.getMessage()));
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
   }
 
 

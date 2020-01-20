@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
     auth.userDetailsService(userDetailService).passwordEncoder(passwordEncoder());
-
   }
 
   @Override
@@ -42,6 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/").permitAll()
         .antMatchers("/vote/**").permitAll()
         .antMatchers("/user/login").permitAll()
+        .antMatchers("/mypage/**").hasRole("USER")
         .antMatchers("/admin").hasRole("ADMIN")
         .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
         .antMatchers("/apply/**").access("hasRole('ADMIN') or hasRole('USER')")
@@ -67,7 +67,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     return new BCryptPasswordEncoder();
   }
-
-
-
 }

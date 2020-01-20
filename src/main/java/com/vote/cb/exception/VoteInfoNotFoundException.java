@@ -1,7 +1,7 @@
 package com.vote.cb.exception;
 
 
-public class VoteInfoNotFoundException extends RuntimeException {
+public class VoteInfoNotFoundException extends CustomException {
 
   private static final long serialVersionUID = 1992364707243373076L;
 

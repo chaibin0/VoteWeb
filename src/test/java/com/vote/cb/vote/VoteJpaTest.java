@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -140,7 +141,7 @@ class VoteJpaTest {
     saveVoteInfo.setVoteList(voteList);
     apply.setHasVote(true);
     Apply savedApply = applyRepository.save(apply);
-
+    
     assertThat(savedApply).isEqualTo(saveVoteInfo.getApply());
     assertThat(saveVoteInfo.getName()).isEqualTo("투표 제목");
     assertThat(saveVoteInfo.getVoteList().get(0).getName()).isEqualTo("첫번째 투표");

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
+
 
 @AllArgsConstructor
 @Getter
@@ -11,7 +13,7 @@ public class ExceptionDetails {
 
   LocalDateTime timestamp;
 
-  String status;
+  int status;
 
   String error;
 

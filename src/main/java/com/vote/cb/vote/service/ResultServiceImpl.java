@@ -8,6 +8,7 @@ import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.apply.domain.enums.VoterStatusType;
 import com.vote.cb.exception.ApplyNotFoundException;
 import com.vote.cb.exception.CandidateNotFoundException;
+import com.vote.cb.exception.CustomException;
 import com.vote.cb.exception.ExceptionDetails;
 import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.exception.VoteInfoNotFoundException;
@@ -28,6 +29,7 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
@@ -63,23 +65,26 @@ public class ResultServiceImpl implements ResultService {
 
     Map<Long, ResultObject> results = new HashMap<>();
 
-    Apply apply = applyRepository.findById(applyId).orElseThrow(ApplyNotFoundException::new);
+    Apply apply =
+        applyRepository.findById(applyId).orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 
     if (!apply.isWriter(user)) {
-      throw new UnAuthorizedException();
+      throw CustomException.UNAUTHORIZED;
     }
 
     if (apply.getEnd().isAfter(LocalDateTime.now())) {
-      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
-          "bad request", "개표할 수 있는 기간이 아닙니다."));
+      return ResponseEntity.badRequest()
+          .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST.getReasonPhrase(), "개표할 수 있는 기간이 아닙니다."));
     }
 
     VoteInfomation voteInfo =
         voteInfoRepository.findByApply(apply).orElseThrow(VoteInfoNotFoundException::new);
 
     if (voteInfo.getCurrent() <= 0) {
-      return ResponseEntity.badRequest().body(new ExceptionDetails(LocalDateTime.now(), "400",
-          "bad request", "투표자가 존재하지 않아 개표를 실패하였습니다."));
+      return ResponseEntity.badRequest()
+          .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+              HttpStatus.BAD_REQUEST.getReasonPhrase(), "투표자가 존재하지 않아 개표를 실패하였습니다."));
     }
 
     List<Voter> voterList = voterRepository.findAllByApply(apply);
@@ -115,7 +120,8 @@ public class ResultServiceImpl implements ResultService {
 
     for (long candidateId : results.keySet()) {
       Candidate candidate =
-          candidateRepository.findById(candidateId).orElseThrow(CandidateNotFoundException::new);
+          candidateRepository.findById(candidateId)
+              .orElseThrow(() -> CustomException.CANDIDATE_NOT_FOUND);
       candidate.setValue(results.get(candidateId).getValue())
           .setElected(results.get(candidateId).getRank());
       candidateRepository.save(candidate);
