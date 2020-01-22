@@ -20,4 +20,6 @@ public class CustomException extends RuntimeException {
   public static final CustomException UNAUTHORIZED = new UnAuthorizedException();
 
   public static final CustomException ALREADY_REGISTERED = new AlreadyRegiststeredException();
+
+  public static final CustomException IS_BLACK = new IsBlackException();
 }

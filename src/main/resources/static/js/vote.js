@@ -171,7 +171,6 @@ function modifyForm(applyId) {
         },
         body: JSON.stringify(votes)
     }).then((response) => {
-
         alert("수정 되었습니다");
         window.location.replace("/apply");
     }).catch((response) => {

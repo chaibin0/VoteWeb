@@ -39,12 +39,21 @@ public class AdminController {
   }
 
   @GetMapping("/user")
-  public ModelAndView viewUser(Pageable pageable, @RequestParam String search,
-      @RequestParam UserStatusType type) {
+  public ModelAndView viewUser(Pageable pageable, @RequestParam(defaultValue = "") String search) {
 
     ModelAndView model = new ModelAndView();
-    model.addObject("userList", adminService.getUserList(pageable, search, type));
-    model.setViewName("admin/adminMain");
+    model.addObject("userList", adminService.getUserList(pageable, search));
+    model.setViewName("admin/adminUser");
+    return model;
+  }
+
+  @GetMapping("/user/black")
+  public ModelAndView viewBlackUser(Pageable pageable,
+      @RequestParam(defaultValue = "") String search) {
+
+    ModelAndView model = new ModelAndView();
+    model.addObject("userList", adminService.getUserBlackList(pageable, search));
+    model.setViewName("admin/adminBlackUser");
     return model;
   }
 }

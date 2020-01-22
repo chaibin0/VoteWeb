@@ -56,7 +56,6 @@ public class Voter {
   String phone;
 
   @Column(name = "VOTER_SSN")
-  @JsonIgnore
   String ssn;
 
   @Column(name = "VOTER_STATUS")

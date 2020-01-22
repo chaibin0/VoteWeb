@@ -5,11 +5,8 @@ import com.vote.cb.apply.controller.dto.ApplyResponseDto;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
-import com.vote.cb.exception.ApplyNotFoundException;
 import com.vote.cb.exception.CustomException;
 import com.vote.cb.exception.ExceptionDetails;
-import com.vote.cb.exception.MemberNotFoundException;
-import com.vote.cb.exception.UnAuthorizedException;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
 
@@ -39,9 +36,8 @@ public class ApplyServiceImpl implements ApplyService {
   @Override
   public Page<Apply> getApplyAllList(Pageable pageable, User user) {
 
-    Member member =
-        memberRepository.findById(user.getUsername())
-            .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
+    Member member = memberRepository.findById(user.getUsername())
+        .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
 
     return applyRepository.findAllByUser(pageable, member);
   }
@@ -67,9 +63,8 @@ public class ApplyServiceImpl implements ApplyService {
   @Override
   public ResponseEntity<?> registerApply(User user, ApplyRequestDto dto) {
 
-    Member member =
-        memberRepository.findById(user.getUsername())
-            .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
+    Member member = memberRepository.findById(user.getUsername())
+        .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
 
     Apply apply = dto.toApply(member);
 
@@ -79,9 +74,8 @@ public class ApplyServiceImpl implements ApplyService {
   @Override
   public List<Apply> getApplyList(User user) {
 
-    Member member =
-        memberRepository.findById(user.getUsername())
-            .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
+    Member member = memberRepository.findById(user.getUsername())
+        .orElseThrow(() -> CustomException.MEMBER_NOT_FOUND);
     List<Apply> applies = applyRepository.findAllByUser(member);
     return applies;
   }

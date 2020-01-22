@@ -10,6 +10,7 @@ import com.vote.cb.admin.service.AdminServiceImpl;
 import com.vote.cb.apply.domain.Apply;
 import com.vote.cb.apply.domain.ApplyRepository;
 import com.vote.cb.apply.domain.enums.ApplyStatusType;
+import com.vote.cb.user.domain.BlackRepository;
 import com.vote.cb.user.domain.Member;
 import com.vote.cb.user.domain.MemberRepository;
 import com.vote.cb.user.domain.enums.UserRoleType;
@@ -53,8 +54,12 @@ class AdminServiceTest {
   @Mock
   MemberRepository userRepository;
 
+  @Mock
+  BlackRepository blackRepository;
+
   @InjectMocks
-  AdminService adminService = new AdminServiceImpl(userRepository, applyRepository);
+  AdminService adminService =
+      new AdminServiceImpl(userRepository, applyRepository, blackRepository);
 
   @AfterAll
   static void tearDownAfterClass() throws Exception {}

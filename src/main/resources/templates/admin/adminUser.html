@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>admin 관리</title>
+    <link rel="stylesheet" type="text/css" href="/lib/semantic/semantic.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="/lib/semantic/semantic.min.js"></script>
+    <script src="/js/admin.js"></script>
+
+</head>
+
+<body>
+    <div th:replace="/admin/fragments/header"></div>
+
+    <div id="wrapped">
+        <table class="ui table">
+            <thead>
+                <tr>
+                    <th>아이디</th>
+                    <th>이름</th>
+                    <th>휴대전화</th>
+                    <th>이메일</th>
+                    <th>상태</th>
+                    <th>블랙</th>
+                    <th>탈퇴</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="list : ${userList}">
+                    <td>[[${list.userId}]]</td>
+                    <td>[[${list.name}]]</td>
+                    <td>[[${list.phone}]]</td>
+                    <td>[[${list.email}]]</td>
+                    <td>[[${list.status}]]</td>
+                    <td>
+                        <button type="submit" th:data="${list.userId}"
+                            th:onclick="|registerBlackUser(this.getAttribute('data'))|">블랙</button>
+
+                        <button type="submit" th:data="${list.userId}"
+                            th:onclick="|cancleBlackUser(this.getAttribute('data'))|">취소</button>
+                    </td>
+                    <td><button type="submit" th:data="${list.userId}"
+                            th:onclick="|removeUser(this.getAttribute('data'))|">탈퇴</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="ui icon input">
+        <input type="text" placeholder="Search..." id="search">
+        <i class="circular search link icon" onclick="searchUserinAll()"></i>
+    </div>
+</body>
+
+</html>

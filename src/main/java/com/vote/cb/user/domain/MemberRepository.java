@@ -1,6 +1,5 @@
 package com.vote.cb.user.domain;
 
-import com.vote.cb.apply.domain.enums.ApplyStatusType;
 import com.vote.cb.user.domain.enums.UserStatusType;
 
 import java.util.Optional;
@@ -19,12 +18,12 @@ public interface MemberRepository extends JpaRepository<Member, String> {
 
   Optional<Member> findByUserId(String id);
 
-  //  Page<Member> findAllOrderByCreatedAt(Pageable pageable);
-
-  Page<Member> findAllByUserIdLikeAndStatusOrderByCreatedAt(Pageable pageable, String id,
+  Page<Member> findAllByUserIdContainingAndStatusOrderByCreatedAt(Pageable pageable, String search,
       UserStatusType status);
 
-  Page<Member> findAllByStatusOrderByCreatedAt(Pageable pageable, UserStatusType status);
+  // Page<Member> findAllByStatusOrderByCreatedAt(Pageable pageable, UserStatusType status);
 
-  Page<Member> findAllByUserIdLikeOrderByCreatedAt(Pageable pageable, String id);
+  Page<Member> findAllByUserIdContainingOrderByCreatedAt(Pageable pageable, String search);
+
+  // Page<Member> findAllByOrderByCreatedAt(Pageable pageable);
 }

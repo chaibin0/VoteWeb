@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     Member member =
         userRepository.findById(username)
             .orElseThrow(() -> new UsernameNotFoundException("아이디를 찾을 수 없습니다 : " + username));
-
+    
     Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 
     for (UserRole role : member.getRole()) {

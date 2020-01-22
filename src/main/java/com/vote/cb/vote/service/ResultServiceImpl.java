@@ -64,7 +64,7 @@ public class ResultServiceImpl implements ResultService {
   public ResponseEntity<?> countVote(User user, long applyId) {
 
     Map<Long, ResultObject> results = new HashMap<>();
-
+    
     Apply apply =
         applyRepository.findById(applyId).orElseThrow(() -> CustomException.APPLY_NOT_FOUND);
 

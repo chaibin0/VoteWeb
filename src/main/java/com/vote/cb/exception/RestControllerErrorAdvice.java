@@ -111,12 +111,22 @@ public class RestControllerErrorAdvice {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   public ResponseEntity<?> alreadyRegister(AlreadyRegiststeredException e) {
 
-    log.info(e.getMessage(), e);
+    log.info(e.getMessage());
 
     return ResponseEntity.badRequest()
         .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
             HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
   }
 
+  @ExceptionHandler(IsBlackException.class)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+  public ResponseEntity<?> isBlack(IsBlackException e) {
+
+    log.info(e.getMessage());
+
+    return ResponseEntity.badRequest()
+        .body(new ExceptionDetails(LocalDateTime.now(), HttpStatus.BAD_REQUEST.value(),
+            HttpStatus.BAD_REQUEST.getReasonPhrase(), e.getMessage()));
+  }
 
 }
