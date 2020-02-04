@@ -46,15 +46,7 @@ class ApplyJpaTest {
   void registerApplyTest() {
 
     // given
-    ApplyRequestDto dto = ApplyRequestDto.builder()
-        .name("홍길동")
-        .email("abc@naver.com")
-        .phone("01000000000")
-        .title("투표테스트")
-        .expectedCount(5)
-        .start(start)
-        .end(end)
-        .build();
+    ApplyRequestDto dto = StaticApply.APPLY_DTO;
 
     // when
     Apply apply = dto.toApply(null);
@@ -75,15 +67,7 @@ class ApplyJpaTest {
   void findApplyByApplyDtoTest() {
 
     // given
-    ApplyRequestDto dto = ApplyRequestDto.builder()
-        .name("홍길동")
-        .email("abc@naver.com")
-        .phone("01000000000")
-        .title("투표테스트")
-        .expectedCount(5)
-        .start(start)
-        .end(end)
-        .build();
+    ApplyRequestDto dto = StaticApply.APPLY_DTO;
 
     Apply apply = Apply.builder()
         .name(dto.getName())
@@ -108,20 +92,9 @@ class ApplyJpaTest {
   void deleteApplyTest() throws Exception {
 
     // given
-    ApplyRequestDto dto = ApplyRequestDto.builder()
-        .name("홍길동")
-        .email("abc@naver.com")
-        .phone("01000000000")
-        .title("투표테스트")
-        .expectedCount(5)
-        .start(start)
-        .end(end)
-        .build();
-
+    ApplyRequestDto dto = StaticApply.APPLY_DTO;
     Apply apply = dto.toApply(null);
-
     Apply newApply = applyRepository.save(apply);
-
     Long id = newApply.getId();
     Apply deleteApply = applyRepository.findById(id).orElseThrow(Exception::new);
     applyRepository.delete(deleteApply);
@@ -134,21 +107,11 @@ class ApplyJpaTest {
   void modifyApplyTest() throws Exception {
 
     // create apply
-    ApplyRequestDto dto = ApplyRequestDto.builder()
-        .name("홍길동")
-        .email("abc@naver.com")
-        .phone("01000000000")
-        .title("투표테스트")
-        .expectedCount(5)
-        .start(start).end(end)
-        .build();
+    ApplyRequestDto dto = StaticApply.APPLY_DTO;
     Apply apply = dto.toApply(null);
-
     Apply newApply = applyRepository.save(apply);
 
     // modify apply
-    LocalDateTime start = LocalDateTime.of(2019, 12, 11, 12, 50);
-    LocalDateTime end = LocalDateTime.of(2019, 12, 30, 12, 50);
     ApplyRequestDto modifyDto = ApplyRequestDto.builder()
         .id(newApply.getId())
         .name("홍수정")
@@ -156,11 +119,12 @@ class ApplyJpaTest {
         .phone("01000000000")
         .title("수정")
         .expectedCount(20)
-        .start(start)
-        .end(end)
+        .start(StaticApply.START_DATE_TIME)
+        .end(StaticApply.END_DATE_TIME)
         .build();
 
     Apply findedApply = applyRepository.findById(modifyDto.getId()).orElseThrow(Exception::new);
+
     findedApply.setName(modifyDto.getName())
         .setEmail(modifyDto.getEmail())
         .setPhone(modifyDto.getPhone())
@@ -176,8 +140,8 @@ class ApplyJpaTest {
     assertThat(modifiedApply.getName()).isEqualTo("홍수정");
     assertThat(modifiedApply.getEmail()).isEqualTo("modify@naver.com");
     assertThat(modifiedApply.getTitle()).isEqualTo("수정");
-    assertThat(modifiedApply.getStart()).isEqualTo(start);
-    assertThat(modifiedApply.getEnd()).isEqualTo(end);
+    assertThat(modifiedApply.getStart()).isEqualTo(StaticApply.START_DATE_TIME);
+    assertThat(modifiedApply.getEnd()).isEqualTo(StaticApply.END_DATE_TIME);
   }
 
   public static void print(Apply apply) {

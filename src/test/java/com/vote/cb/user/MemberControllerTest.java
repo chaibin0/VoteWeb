@@ -9,6 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vote.cb.interceptor.BlackUserApiInterceptor;
+import com.vote.cb.interceptor.BlackUserInterceptor;
 import com.vote.cb.user.controller.MemberApiController;
 import com.vote.cb.user.controller.dto.CheckUserIdResponseDto;
 import com.vote.cb.user.controller.dto.SignUpDto;
@@ -37,6 +39,12 @@ public class MemberControllerTest {
 
   @SpyBean(name = "passwordEncoder")
   PasswordEncoder passwordEncoder;
+
+  @MockBean
+  BlackUserApiInterceptor blackUserApiInterceptor;
+
+  @MockBean
+  BlackUserInterceptor blackUserInterceptor;
 
   ObjectMapper mapper = new ObjectMapper();
 
@@ -76,7 +84,7 @@ public class MemberControllerTest {
 
     SignUpDto dto = SignUpDto.builder()
         .id("testId")
-        .email("email")
+        .email("email@naver.com")
         .name("name")
         .password("password")
         .phone("01000004444")
@@ -86,7 +94,7 @@ public class MemberControllerTest {
         .body(dto.toMember(passwordEncoder)))
             .when(memberSerivce)
             .signUpUser(Mockito.any(dto.getClass()));
-
+    
     mvc.perform(post("/api/v1/user/signup")
         .contentType(MediaType.APPLICATION_JSON)
         .content(mapper.writeValueAsString(dto)))

@@ -1,5 +1,6 @@
 package com.vote.cb.voter;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -18,6 +19,8 @@ import com.vote.cb.apply.domain.Voter;
 import com.vote.cb.apply.domain.enums.VoterStatusType;
 import com.vote.cb.apply.service.ApplyService;
 import com.vote.cb.apply.service.VoterService;
+import com.vote.cb.interceptor.BlackUserApiInterceptor;
+import com.vote.cb.interceptor.BlackUserInterceptor;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -51,12 +54,17 @@ class VoterWebMvcTest {
   @Autowired
   ObjectMapper mapper;
 
-
   @MockBean
   VoterService voterService;
 
   @MockBean
   ApplyService applyService;
+
+  @MockBean
+  BlackUserApiInterceptor blackUserApiInterceptor;
+
+  @MockBean
+  BlackUserInterceptor blackUserInterceptor;
 
   @BeforeEach
   void setUp() {
@@ -95,10 +103,12 @@ class VoterWebMvcTest {
     Long applyId = 1L;
     Page<Voter> page = new PageImpl<Voter>(new ArrayList<>(Arrays.asList(voter1, voter2)));
 
-    given(
-        voterService.getVoterListByApply(Mockito.any(Pageable.class), Mockito.any(User.class),
-            Mockito.eq(applyId)))
-                .willReturn(page);
+    given(voterService.getVoterListByApply(Mockito.any(Pageable.class), Mockito.any(User.class),
+        Mockito.eq(applyId)))
+            .willReturn(page);
+
+    given(blackUserApiInterceptor.preHandle(any(), any(), any())).willReturn(true);
+
     mvc.perform(get("/api/v1/apply/1/voter"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.content[0].name").value("일번"))
@@ -122,6 +132,7 @@ class VoterWebMvcTest {
     given(voterService.registerVoter(Mockito.any(User.class), Mockito.any(VoterDto.class),
         Mockito.eq(applyId)))
             .willReturn(ResponseEntity.created(null).build());
+    given(blackUserApiInterceptor.preHandle(any(), any(), any())).willReturn(true);
 
     mvc.perform(
         post("/api/v1/apply/1/voter").contentType(MediaType.APPLICATION_JSON)
@@ -146,6 +157,8 @@ class VoterWebMvcTest {
         Mockito.eq(applyId)))
             .willReturn(ResponseEntity.ok().build());
 
+    given(blackUserApiInterceptor.preHandle(any(), any(), any())).willReturn(true);
+
     mvc.perform(
         post("/api/v1/apply/1/voter").contentType(MediaType.APPLICATION_JSON)
             .content(mapper.writeValueAsString(dto)))
@@ -164,6 +177,7 @@ class VoterWebMvcTest {
     given(
         voterService.removeVoter(Mockito.any(User.class), Mockito.eq(applyId), Mockito.eq(voterId)))
             .willReturn(ResponseEntity.ok().build());
+    given(blackUserApiInterceptor.preHandle(any(), any(), any())).willReturn(true);
 
     mvc.perform(delete("/api/v1/apply/1/voter/1"))
         .andExpect(status().isOk())

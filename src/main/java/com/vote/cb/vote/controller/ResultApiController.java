@@ -25,6 +25,4 @@ public class ResultApiController {
 
     return resultService.countVote(user, applyId);
   }
-
-
 }
