@@ -42,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/vote/**").permitAll()
         .antMatchers("/user/login").permitAll()
         .antMatchers("/mypage/**").hasRole("USER")
-        .antMatchers("/admin").hasRole("ADMIN")
+        .antMatchers("/admin/**").hasRole("ADMIN")
         .antMatchers("/api/v1/admin/**").hasRole("ADMIN")
         .antMatchers("/apply/**").access("hasRole('ADMIN') or hasRole('USER')")
         .and()

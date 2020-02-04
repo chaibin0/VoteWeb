@@ -1,5 +1,7 @@
 package com.vote.cb.admin;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -9,6 +11,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.vote.cb.admin.controller.AdminApiController;
 import com.vote.cb.admin.service.AdminService;
+import com.vote.cb.interceptor.BlackUserApiInterceptor;
+import com.vote.cb.interceptor.BlackUserInterceptor;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,6 +26,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(controllers = AdminApiController.class)
+
 class AdminMvcTest {
 
   @Autowired
@@ -29,13 +34,19 @@ class AdminMvcTest {
 
   @MockBean
   AdminService adminService;
-
+  
+  @MockBean 
+  BlackUserApiInterceptor blackUserApiInterceptor;
+  
+  @MockBean 
+  BlackUserInterceptor blackUserInterceptor;
+  
   @DisplayName("신청서 거부 Controller Test")
   @WithMockUser(username = "admin", password = "admin", roles = {"ADMIN"})
   @Test
   public void rejectTest() throws Exception {
 
-    given(adminService.rejectApply(Mockito.anyLong()))
+    given(adminService.rejectApply(anyLong()))
         .willReturn(ResponseEntity.accepted().build());
 
     mvc.perform(post("/api/v1/admin/apply/reject")
@@ -50,7 +61,7 @@ class AdminMvcTest {
   @Test
   public void approvalTest() throws Exception {
 
-    given(adminService.approvalApply(Mockito.eq(2L)))
+    given(adminService.approvalApply(eq(2L)))
         .willReturn(ResponseEntity.accepted().build());
     mvc.perform(post("/api/v1/admin/apply/approval")
         .contentType(MediaType.APPLICATION_JSON)
@@ -65,9 +76,9 @@ class AdminMvcTest {
   public void removeUser() throws Exception {
 
     String id = "test";
-    doReturn(ResponseEntity.accepted().build()).when(adminService).removeUser(Mockito.eq(id));
+    doReturn(ResponseEntity.accepted().build()).when(adminService).removeUser(eq(id));
 
-    mvc.perform(delete("/api/v1/admin/user/remove")
+    mvc.perform(delete("/api/v1/admin/user")
         .param("id", "test"))
         .andExpect(status().isAccepted())
         .andDo(print());
